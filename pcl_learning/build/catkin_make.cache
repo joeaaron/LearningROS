@@ -1,0 +1,2 @@
+basic_usage
+-DCMAKE_BUILD_TYPE=Debug -DCATKIN_DEVEL_PREFIX=/home/cowa/JA/LearningROS/pcl_learning/devel -DCMAKE_INSTALL_PREFIX=/home/cowa/JA/LearningROS/pcl_learning/install -G Unix Makefiles
