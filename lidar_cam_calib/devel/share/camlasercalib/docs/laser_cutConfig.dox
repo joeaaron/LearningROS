@@ -1,0 +1,11 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~x_min" : \b [double] x_min min: -10.0, default: -1.4, max: 10.0
+- \b "~x_max" : \b [double] x_max min: -10.0, default: 0.8, max: 10.0
+- \b "~y_min" : \b [double] y_min min: -10.0, default: 1.8, max: 10.0
+- \b "~y_max" : \b [double] y_max min: -10.0, default: 2.8, max: 10.0
+- \b "~z_min" : \b [double] z_min min: -10.0, default: -1.0, max: 10.0
+- \b "~z_max" : \b [double] z_max min: -10.0, default: 0.4, max: 10.0
+

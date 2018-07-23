@@ -1,0 +1,12 @@
+\subsubsection usage Usage
+\verbatim
+<node name="laser_cut" pkg="laser_cut" type="laser_cut">
+  <param name="x_min" type="double" value="-1.4" />
+  <param name="x_max" type="double" value="0.8" />
+  <param name="y_min" type="double" value="1.8" />
+  <param name="y_max" type="double" value="2.8" />
+  <param name="z_min" type="double" value="-1.0" />
+  <param name="z_max" type="double" value="0.4" />
+</node>
+\endverbatim
+
