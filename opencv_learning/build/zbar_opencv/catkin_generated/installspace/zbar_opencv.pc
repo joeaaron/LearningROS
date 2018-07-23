@@ -1,0 +1,8 @@
+prefix=/home/aaron/JA/code/LearningROS/opencv_learning/install
+
+Name: zbar_opencv
+Description: Description of zbar_opencv
+Version: 0.0.0
+Cflags: -I/home/aaron/JA/code/LearningROS/opencv_learning/install/include
+Libs: -L/home/aaron/JA/code/LearningROS/opencv_learning/install/lib -lzbar_opencv
+Requires: 

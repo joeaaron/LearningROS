@@ -8,12 +8,18 @@ int main(int argc, char **argv)
 	ros::Rate r(100);
 
 	tf::TransformBroadcaster broadcaster;
+	tf::Transform transform;
+	tf::Quaternion q;
 
 	while(n.ok())
 	{
+		transform.setOrigin(tf::Vector3(0.1, 0.0, 0.2));
+		q.setRPY(0, 0, 0);
+		transform.setRotation(q);
+
 		broadcaster.sendTransform(
 			tf::StampedTransform(
-				tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.1, 0.0, 0.2)),
+				transform, 
 				ros::Time::now(), "base_link", "base_laser"));
 		r.sleep();
 	}
