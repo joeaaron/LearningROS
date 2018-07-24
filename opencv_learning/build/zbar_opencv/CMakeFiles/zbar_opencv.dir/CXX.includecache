@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/src/zbar_opencv.cpp
+/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/include/zbarScanner.h
 ros/ros.h
 -
 image_transport/image_transport.h
@@ -27,6 +27,14 @@ iostream
 -
 iomanip
 -
+
+/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/src/zbarScanner.cpp
+zbarScanner.h
+/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/src/zbarScanner.h
+
+/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/src/zbar_opencv.cpp
+zbarScanner.h
+/home/aaron/JA/code/LearningROS/opencv_learning/src/zbar_opencv/src/zbarScanner.h
 
 /opt/ros/kinetic/include/cv_bridge/cv_bridge.h
 sensor_msgs/Image.h

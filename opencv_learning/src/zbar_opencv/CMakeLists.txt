@@ -29,7 +29,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
  
-add_executable(zbar_opencv src/zbar_opencv.cpp)
+add_executable(zbar_opencv 
+      src/zbar_opencv.cpp
+      src/zbarScanner.cpp
+
+      include/zbarScanner.h
+)
+
 target_link_libraries(zbar_opencv
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}

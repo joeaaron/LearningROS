@@ -56,6 +56,16 @@ CMAKE_BINARY_DIR = /home/aaron/JA/code/LearningROS/opencv_learning/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -90,17 +100,6 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -123,15 +122,16 @@ install/strip/fast: install/strip
 
 .PHONY : install/strip/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
+# Special rule for the target test
+test/fast: test
 
-.PHONY : list_install_components/fast
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -180,380 +180,32 @@ zbar_opencv/fast:
 	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/zbar_opencv.dir/build.make zbar_opencv/CMakeFiles/zbar_opencv.dir/build
 .PHONY : zbar_opencv/fast
 
-# Convenience name for target.
-zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+src/zbarScanner.o: src/zbarScanner.cpp.o
 
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : src/zbarScanner.o
 
-.PHONY : rosgraph_msgs_generate_messages_nodejs
+# target to build an object file
+src/zbarScanner.cpp.o:
+	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/zbar_opencv.dir/build.make zbar_opencv/CMakeFiles/zbar_opencv.dir/src/zbarScanner.cpp.o
+.PHONY : src/zbarScanner.cpp.o
 
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
+src/zbarScanner.i: src/zbarScanner.cpp.i
 
-# Convenience name for target.
-zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
+.PHONY : src/zbarScanner.i
 
-# Convenience name for target.
-geometry_msgs_generate_messages_nodejs: zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
+# target to preprocess a source file
+src/zbarScanner.cpp.i:
+	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/zbar_opencv.dir/build.make zbar_opencv/CMakeFiles/zbar_opencv.dir/src/zbarScanner.cpp.i
+.PHONY : src/zbarScanner.cpp.i
 
-.PHONY : geometry_msgs_generate_messages_nodejs
+src/zbarScanner.s: src/zbarScanner.cpp.s
 
-# fast build rule for target.
-geometry_msgs_generate_messages_nodejs/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build.make zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build
-.PHONY : geometry_msgs_generate_messages_nodejs/fast
+.PHONY : src/zbarScanner.s
 
-# Convenience name for target.
-zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/build.make zbar_opencv/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_eus: zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_eus
-
-# fast build rule for target.
-geometry_msgs_generate_messages_eus/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build.make zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build
-.PHONY : geometry_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make zbar_opencv/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_py: zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_py
-
-# fast build rule for target.
-geometry_msgs_generate_messages_py/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
-.PHONY : geometry_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_cpp: zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_lisp: zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_lisp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_py: zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make zbar_opencv/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_cpp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_eus: zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_eus
-
-# fast build rule for target.
-sensor_msgs_generate_messages_eus/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
-.PHONY : sensor_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_cpp: zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_cpp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_cpp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
-.PHONY : geometry_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_nodejs: zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-sensor_msgs_generate_messages_nodejs/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make zbar_opencv/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
-.PHONY : sensor_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_py: zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-.PHONY : roscpp_generate_messages_py
-
-# fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/build.make zbar_opencv/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_eus: zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_eus
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_eus/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
-.PHONY : rosgraph_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_lisp: zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_lisp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_lisp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make zbar_opencv/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
-.PHONY : geometry_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make zbar_opencv/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_nodejs: zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : std_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-std_msgs_generate_messages_nodejs/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make zbar_opencv/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
-.PHONY : std_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_eus: zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-.PHONY : std_msgs_generate_messages_eus
-
-# fast build rule for target.
-std_msgs_generate_messages_eus/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make zbar_opencv/CMakeFiles/std_msgs_generate_messages_eus.dir/build
-.PHONY : std_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make zbar_opencv/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_eus: zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-.PHONY : roscpp_generate_messages_eus
-
-# fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/build.make zbar_opencv/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_py: zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_py
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_lisp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make zbar_opencv/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f CMakeFiles/Makefile2 zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_nodejs: zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-.PHONY : roscpp_generate_messages_nodejs
-
-# fast build rule for target.
-roscpp_generate_messages_nodejs/fast:
-	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make zbar_opencv/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
-.PHONY : roscpp_generate_messages_nodejs/fast
+# target to generate assembly for a file
+src/zbarScanner.cpp.s:
+	cd /home/aaron/JA/code/LearningROS/opencv_learning/build && $(MAKE) -f zbar_opencv/CMakeFiles/zbar_opencv.dir/build.make zbar_opencv/CMakeFiles/zbar_opencv.dir/src/zbarScanner.cpp.s
+.PHONY : src/zbarScanner.cpp.s
 
 src/zbar_opencv.o: src/zbar_opencv.cpp.o
 
@@ -588,39 +240,17 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... list_install_components"
 	@echo "... install"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... test"
+	@echo "... zbar_opencv"
 	@echo "... install/local"
 	@echo "... install/strip"
-	@echo "... zbar_opencv"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... geometry_msgs_generate_messages_nodejs"
-	@echo "... std_msgs_generate_messages_py"
-	@echo "... geometry_msgs_generate_messages_eus"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... geometry_msgs_generate_messages_py"
-	@echo "... sensor_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... sensor_msgs_generate_messages_py"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... list_install_components"
-	@echo "... sensor_msgs_generate_messages_eus"
-	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_nodejs"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_eus"
-	@echo "... geometry_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_nodejs"
-	@echo "... std_msgs_generate_messages_eus"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_nodejs"
+	@echo "... test"
+	@echo "... src/zbarScanner.o"
+	@echo "... src/zbarScanner.i"
+	@echo "... src/zbarScanner.s"
 	@echo "... src/zbar_opencv.o"
 	@echo "... src/zbar_opencv.i"
 	@echo "... src/zbar_opencv.s"

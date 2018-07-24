@@ -1,0 +1,8 @@
+prefix=/home/aaron/JA/code/LearningROS/opencv_learning/install
+
+Name: qr_opencv
+Description: Description of qr_opencv
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/aaron/JA/code/LearningROS/opencv_learning/install/lib 
+Requires: 
