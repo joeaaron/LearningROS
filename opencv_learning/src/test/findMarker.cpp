@@ -225,62 +225,10 @@ void FindMarker::FindMarkerContours(cv_bridge::CvImagePtr cv_ptr)
 
     
     //Get the central coordinates
-    std::vector<Point> pointFind;
-    for(int i = 0; i < _contours.size(); i++)
-      pointFind[i] = CalCenter(_contours, i);
-    
-    //Ellimination of interference points
-    Mat dst;
     Point point[3];
-    double angle;
-    Mat rot_mat;
-    if (pointFind.size() > 3)
-    {
-      double lengthA = 1000000000000000000;
-      double lengthB = 1000000000000000000;
-      for (int i = 0; i < pointFind.size(); ++i)
-      {
-        for (int j = 0; j < pointFind.size(); ++j)
-        {
-          for (int k = 0; k < pointFind.size(); ++k)
-          {
-            if (i != j && j!= k && i != k)
-            {
-              double dxa, dxb, dya, dyb;
-              double k1, k2, wa, wb;
-              dxa = pointFind[i].x - pointFind[j].x;
-              dxb = pointFind[i].x - pointFind[k].x;
-              dya = pointFind[i].y - pointFind[j].y;
-              dyb = pointFind[i].y - pointFind[k].y;
-
-              if (dxa == 0 || dxb == 0) continue;
-              k1 = dya / dxa;
-              k2 = dyb / dxb;
-              wa = sqrt(pow(dya, 2) + pow(dxa, 2));
-              wb = sqrt(pow(dyb, 2) + pow(dxb, 2));
-              double _angle = abs(atan(k1) * 180 / CV_PI) + abs(atan(k2) * 180 / CV_PI);
-              if (int(_angle) >= 85 && int(_angle) <= 95 && wa <= lengthA && wb <= lengthB)
-              {
-                /* code */
-                lengthA = wa;
-                lengthB = wb;
-                point[0] = pointFind[i];
-                point[1] = pointFind[j];
-                point[2] = pointFind[k];
-              }
-            }
-
-          }
-        }
-      }
-    }
-    else
-    {
-      for (int i = 0; i < 3; ++i)
-      {
-        point[i] = pointFind[i];
-      }
-    }
+    for(int i = 0; i < _contours.size(); i++)
+      point[i] = CalCenter(_contours, i);
+    
 
     area = contourArea(_contours[0]);
     int area_side = cvRound(sqrt(double(area)));

@@ -1,0 +1,8 @@
+prefix=/home/aaron/JA/code/LearningROS/opencv_learning/devel
+
+Name: agv_qr
+Description: Description of agv_qr
+Version: 0.0.0
+Cflags: -I/home/aaron/JA/code/LearningROS/opencv_learning/src/agv_qr/include
+Libs: -L/home/aaron/JA/code/LearningROS/opencv_learning/devel/lib -lagv_qr
+Requires: 
