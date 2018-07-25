@@ -105,46 +105,6 @@ void ImageConverter::ProcessFrame(cv_bridge::CvImagePtr cv_ptr)
 
     imshow("result", img);
     waitKey(1);
-    /*
-    int minx = 0, miny = 0, maxx = 100000, maxy = 100000;
-    for(int i = 0; i < 4; i++)
-    {
-      if (maxx < _points[i].x) maxx = _points[i].x;
-      if (maxy < _points[i].y) maxy = _points[i].y;
-      if (minx > _points[i].x) minx = _points[i].x;
-      if (miny > _points[i].y) miny = _points[i].y;
-      line(src_contour, _points[i%4], _points[(i+1)%4], Scalar(20, 21, 237), 3);
-    }
-    //line(img, _points[i%4], _points[(i+1)%4], Scalar(20, 21, 237), 3);
-    
-    imshow("result", src_contour);
-    waitKey(1);
-    
-    int set_inter = 5;
-    while(true)
-    {
-      minx -= set_inter;
-      miny -= set_inter;
-      maxx += set_inter;
-      maxy += set_inter;
-      if (maxx > img.size().width || maxy > img.size().height || minx < 0 || miny < 0)
-      {
-         minx += set_inter;
-         miny += set_inter;
-         maxx -= set_inter;
-         maxy -= set_inter;
-         set_inter--;
-      }
-      else
-      {
-         break;
-      }
-    }
-
-    Mat fout = src_contour(Rect(minx, miny, maxx - minx, maxy - miny)); //ROI
-
-   
-	*/
    
 }
 
