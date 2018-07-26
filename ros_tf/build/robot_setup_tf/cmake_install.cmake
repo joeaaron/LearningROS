@@ -1,8 +1,8 @@
-# Install script for directory: /home/aaron/JA/ROS_PRO/ros_tf/src/robot_setup_tf
+# Install script for directory: /home/aaron/JA/code/LearningROS/ros_tf/src/robot_setup_tf
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/aaron/JA/ROS_PRO/ros_tf/install")
+  set(CMAKE_INSTALL_PREFIX "/home/aaron/JA/code/LearningROS/ros_tf/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aaron/JA/ROS_PRO/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tf.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aaron/JA/code/LearningROS/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tf.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_setup_tf/cmake" TYPE FILE FILES
-    "/home/aaron/JA/ROS_PRO/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tfConfig.cmake"
-    "/home/aaron/JA/ROS_PRO/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tfConfig-version.cmake"
+    "/home/aaron/JA/code/LearningROS/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tfConfig.cmake"
+    "/home/aaron/JA/code/LearningROS/ros_tf/build/robot_setup_tf/catkin_generated/installspace/robot_setup_tfConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_setup_tf" TYPE FILE FILES "/home/aaron/JA/ROS_PRO/ros_tf/src/robot_setup_tf/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robot_setup_tf" TYPE FILE FILES "/home/aaron/JA/code/LearningROS/ros_tf/src/robot_setup_tf/package.xml")
 endif()
 

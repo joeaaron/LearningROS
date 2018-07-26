@@ -38,7 +38,7 @@ private:
     void CheckCenter(vector<vector<Point> >c, vector<int>& index);
     void readParameters();
     int readCalibPara(string filename);
-    void EstimatePosition(vector<Point> points);
+    void EstimatePosition(vector<Point2f> points);
     vector<float> rotationMatrixToEulerAngles(Mat& R, vector<float>& angle);
 private:
     //ros::NodeHandle _nh;
@@ -55,7 +55,6 @@ private:
     vector<Point3f> m_markerCorners3d;  
     Mat m_camMat;
     Mat m_distCoeff;
-    vector<float> angles;
     string _calibFile;              //cameta laser calibration file
 };
 

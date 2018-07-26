@@ -1,6 +1,6 @@
 <!-- -->
 <launch>
-	<node pkg="agv_qr" type="agv_qr" name="agv_qr" args="$(find agv_qr)/../data/param/calib.yml" output="screen">
+	<node pkg="agv_qr" type="agv_qr" name="agv_qr" args="$(find agv_qr)/../data/param/ost.yml" output="screen">
 			<param name="image_sub" type="string" value="/usb_cam/image_raw"/>		
 	</node>
 </launch>

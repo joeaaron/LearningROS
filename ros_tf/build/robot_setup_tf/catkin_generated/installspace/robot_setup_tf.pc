@@ -1,8 +1,8 @@
-prefix=/home/aaron/JA/ROS_PRO/ros_tf/install
+prefix=/home/aaron/JA/code/LearningROS/ros_tf/install
 
 Name: robot_setup_tf
 Description: Description of robot_setup_tf
 Version: 0.0.0
-Cflags: 
-Libs: -L/home/aaron/JA/ROS_PRO/ros_tf/install/lib 
+Cflags: -I/home/aaron/JA/code/LearningROS/ros_tf/install/include
+Libs: -L/home/aaron/JA/code/LearningROS/ros_tf/install/lib 
 Requires: 

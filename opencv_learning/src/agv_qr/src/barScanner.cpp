@@ -8,8 +8,13 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile)
 	: it(nh),
 	_calibFile(calibFile)
 {
-	readParameters();
-
+	readParameters();  //when it should be used.
+    /*
+    m_camMat = (Mat_<float>(3, 3) << 0, 0, 0,
+                                    0, 0, 0,
+                                    0, 0, 0);
+    m_distCoeff = (Mat_<float>(4, 1) << 0, 0, 0, 0);
+    */
     m_markerSize = Size(100, 100);
     // marker default size : 100 * 100; markercorner : 100 * 100 rectangle
     m_markerCorners2d.push_back(Point2f(0, 0));
@@ -17,11 +22,11 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile)
     m_markerCorners2d.push_back(Point2f(m_markerSize.width-1, m_markerSize.height-1));
     m_markerCorners2d.push_back(Point2f(0, m_markerSize.height-1));
 
-    // 3d corner coordinate ---clockwise
+    // 3d corner coordinate ---anticlockwise
     m_markerCorners3d.push_back(cv::Point3f(-0.5f,-0.5f,0));
-    m_markerCorners3d.push_back(cv::Point3f(+0.5f,-0.5f,0));
-    m_markerCorners3d.push_back(cv::Point3f(+0.5f,+0.5f,0));
     m_markerCorners3d.push_back(cv::Point3f(-0.5f,+0.5f,0));
+    m_markerCorners3d.push_back(cv::Point3f(+0.5f,+0.5f,0));
+    m_markerCorners3d.push_back(cv::Point3f(+0.5f,-0.5f,0));
 
     //使用image_transport订阅图像话题“in” 和 发布图像话题“out” /camera/rgb/image_raw
     image_sub=it.subscribe("/usb_cam/image_raw",1,&ImageConverter::imageCb,this);
@@ -141,7 +146,7 @@ vector<_Tp> convertMat2Vector(const Mat &mat)
   return (vector<_Tp>)(mat.reshape(1, 1));//通道数不变，按行转为一行
 }
 
-void ImageConverter::EstimatePosition(vector<Point> points)
+void ImageConverter::EstimatePosition(vector<Point2f> points)
 {  
     Mat Rvec;
     Mat raux, taux;
@@ -158,15 +163,17 @@ void ImageConverter::EstimatePosition(vector<Point> points)
     cout<<"R:"<<Rvec<<endl;
     cout<<"T:"<<taux <<endl;
     cout<<"Extrinc: "<<Extrinc << endl;
+    /*
     string resultName = "result.yml";
     FileStorage calibrate(resultName, FileStorage::WRITE);
     calibrate<< "CameraExtrinsicMat" << Extrinc;
     calibrate.release();
+    */
 
     vector<float> angles;
     rotationMatrixToEulerAngles(Rvec, angles);
 
-    ///tf transform
+    ///tf transform broadcast
     transform.setOrigin(tf::Vector3(Tvec[0], Tvec[1], Tvec[2]));
     q.setRPY(angles[0], angles[1], angles[2]);
     transform.setRotation(q);
@@ -359,18 +366,22 @@ void ImageConverter::QRDecode(Mat img)
       }
 	  
 	  vector<Point> vp;
+      vector<Point2f> pointBuf;
 	  int n = symbol->get_location_size();
 	  for (int i = 0; i < n; i++)
 	  {
 	     vp.push_back(Point(symbol->get_location_x(i),symbol->get_location_y(i)));
+         pointBuf.push_back(vp[i]);
 	  }    
-	  //EstimatePosition(vp);
-	  /*
-	  for (vector<Point>::iterator it = vp.begin(); it != vp.end(); it++)
-	  {
-	  	cout << "Points:" << *it << endl;
-	  }
+      //cornerSubPix(img, pointBuf, Size(5, 5), Size(-1, -1));
+	  EstimatePosition(pointBuf);
 	  
+	  for (vector<Point2f>::iterator it = pointBuf.begin(); it != pointBuf.end(); it++)
+	  {
+	  	 cout << "Points:" << *it << endl;
+         circle(img, *it, 3, Scalar(255, 0, 0), -1, 8);
+	  }
+	  /*
 	  RotatedRect r = minAreaRect(vp);
 	  Point2f pts[4];
 	  r.points(pts);

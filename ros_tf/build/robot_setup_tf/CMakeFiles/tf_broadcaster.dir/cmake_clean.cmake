@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tf_broadcaster.dir/src/tf_broadcaster.cpp.o"
-  "/home/aaron/JA/ROS_PRO/ros_tf/devel/lib/robot_setup_tf/tf_broadcaster.pdb"
-  "/home/aaron/JA/ROS_PRO/ros_tf/devel/lib/robot_setup_tf/tf_broadcaster"
+  "/home/aaron/JA/code/LearningROS/ros_tf/devel/lib/robot_setup_tf/tf_broadcaster.pdb"
+  "/home/aaron/JA/code/LearningROS/ros_tf/devel/lib/robot_setup_tf/tf_broadcaster"
 )
 
 # Per-language clean rules from dependency scanning.
