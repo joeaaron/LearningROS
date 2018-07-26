@@ -4,10 +4,11 @@ RNG rng(12345);
 #define CAMERAMAT "CameraMat"
 #define DISTCOEFF "DistCoeff"
 
-ImageConverter::ImageConverter(ros::NodeHandle nh)
-	: it(nh)
+ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile)
+	: it(nh),
+	_calibFile(calibFile)
 {
-	readPara("../param/calib.yml");
+	readParameters();
 
     m_markerSize = Size(100, 100);
     // marker default size : 100 * 100; markercorner : 100 * 100 rectangle
@@ -26,6 +27,12 @@ ImageConverter::ImageConverter(ros::NodeHandle nh)
     image_sub=it.subscribe("/usb_cam/image_raw",1,&ImageConverter::imageCb,this);
     image_pub=it.advertise("agv_qr",1);
 
+}
+
+void ImageConverter::readParameters()
+{
+    readCalibPara(_calibFile.c_str());
+    //it.param("image_sub", image_sub, string("/usb_cam/image_raw"));      //topic name
 }
 
 inline Point CalCenter(vector<vector<Point> > contours, int i)
@@ -151,8 +158,12 @@ void ImageConverter::EstimatePosition(vector<Point> points)
     cout<<"R:"<<Rvec<<endl;
     cout<<"T:"<<taux <<endl;
     cout<<"Extrinc: "<<Extrinc << endl;
+    string resultName = "result.yml";
+    FileStorage calibrate(resultName, FileStorage::WRITE);
+    calibrate<< "CameraExtrinsicMat" << Extrinc;
+    calibrate.release();
 
-    angles.clear();
+    vector<float> angles;
     rotationMatrixToEulerAngles(Rvec, angles);
 
     ///tf transform
@@ -166,7 +177,7 @@ void ImageConverter::EstimatePosition(vector<Point> points)
         ros::Time::now(), "base_camera", "base_qr"));
 }
 
-int ImageConverter::readPara(string filename)
+int ImageConverter::readCalibPara(string filename)
 {
     cv::FileStorage fs(filename,cv::FileStorage::READ);
     if(!fs.isOpened())

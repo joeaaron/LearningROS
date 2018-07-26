@@ -24,7 +24,7 @@ using namespace zbar;
 class ImageConverter
 {
 public:
-    ImageConverter(ros::NodeHandle nh);
+    ImageConverter(ros::NodeHandle nh,const string& calibFile);
  
     ~ImageConverter(){}
  
@@ -36,7 +36,8 @@ private:
     void QRDecode(Mat img);
     double GetDistance (CvPoint pointO,CvPoint pointA);
     void CheckCenter(vector<vector<Point> >c, vector<int>& index);
-    int readPara(string filename);
+    void readParameters();
+    int readCalibPara(string filename);
     void EstimatePosition(vector<Point> points);
     vector<float> rotationMatrixToEulerAngles(Mat& R, vector<float>& angle);
 private:
@@ -55,6 +56,7 @@ private:
     Mat m_camMat;
     Mat m_distCoeff;
     vector<float> angles;
+    string _calibFile;              //cameta laser calibration file
 };
 
 #endif
