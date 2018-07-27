@@ -29,6 +29,9 @@ CATKIN_ENABLE_TESTING:BOOL=ON
 //Catkin skip testing
 CATKIN_SKIP_TESTING:BOOL=OFF
 
+//No help, variable specified on the command line.
+CATKIN_WHITELIST_ELIST_PACKAGES:UNINITIALIZED=
+
 //List of ';' separated packages to build
 CATKIN_WHITELIST_PACKAGES:STRING=
 

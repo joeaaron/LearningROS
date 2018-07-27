@@ -23,7 +23,7 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile)
     m_markerCorners2d.push_back(Point2f(0, m_markerSize.height-1));
 
     // 3d corner coordinate ---anticlockwise
-    m_markerCorners3d.push_back(cv::Point3f(-0.5f,-0.5f,0));
+    m_markerCorners3d.push_back(cv::Point3f(-0.5f,-0.5f,0));   //三维坐标的单位是毫米
     m_markerCorners3d.push_back(cv::Point3f(-0.5f,+0.5f,0));
     m_markerCorners3d.push_back(cv::Point3f(+0.5f,+0.5f,0));
     m_markerCorners3d.push_back(cv::Point3f(+0.5f,-0.5f,0));
@@ -285,7 +285,7 @@ void ImageConverter::ProcessFrame(cv_bridge::CvImagePtr cv_ptr)
 	        Mat ROI_image;
 	        ROI_image=img(ROI);
 	        QRDecode(ROI_image);
-	     }
+	   }
     }
 
 
