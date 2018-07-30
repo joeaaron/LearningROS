@@ -385,9 +385,9 @@ void ImageConverter::QRDecode(Mat img)
       double x = L * cos(a2);
       double y = L * sin(a1);
 
-      cout << "angle_a1 = " << a1 << endl;
-      cout << "angle_a2 = " << a2 << endl;
-      cout << "angle_a3 = " << a3 << endl;
+      cout << "Horizontal Proj: " << x << endl;
+      cout << "Vertical Proj:" << y << endl;
+      cout << "Angle:" << a3 << endl;
     }
     //imshow("final", frame);
     imshow("captured", img);
