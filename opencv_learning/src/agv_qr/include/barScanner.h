@@ -15,6 +15,7 @@
 #include <zbar.h>
 #include <iostream>
 #include <iomanip>
+#include <math.h>
 
 using namespace std;
 using namespace cv;
@@ -40,6 +41,9 @@ private:
     int readCalibPara(string filename);
     void EstimatePosition(vector<Point2f> points);
     vector<float> rotationMatrixToEulerAngles(Mat& R, vector<float>& angle);
+    void DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,             
+    Scalar& color, int thickness, int lineType);
+    float GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c);
 private:
     //ros::NodeHandle _nh;
     image_transport::ImageTransport it;
@@ -56,6 +60,8 @@ private:
     Mat m_camMat;
     Mat m_distCoeff;
     string _calibFile;              //cameta laser calibration file
+
+    Scalar lineColor;
 };
 
 #endif

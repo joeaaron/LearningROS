@@ -31,6 +31,8 @@ iostream
 -
 iomanip
 -
+math.h
+-
 
 /home/aaron/JA/code/LearningROS/opencv_learning/src/agv_qr/src/agv_qr.cpp
 barScanner.h
