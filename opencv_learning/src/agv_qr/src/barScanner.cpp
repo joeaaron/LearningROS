@@ -195,6 +195,10 @@ int ImageConverter::readCalibPara(string filename)
     }
     fs[CAMERAMAT]>>m_camMat;
     fs[DISTCOEFF]>>m_distCoeff;
+
+    double unit_x = m_camMat.at<double>(0, 0);
+    double unit_y = m_camMat.at<double>(1, 1);
+    cout <<  "dx= " << unit_x << endl << "dy= "<< unit_y<<endl;
 }
 
 void ImageConverter::ProcessFrame(cv_bridge::CvImagePtr cv_ptr)
@@ -301,18 +305,18 @@ void ImageConverter::QRDecode(Mat img)
 
     //scan the image for barcodes
     scanner.scan(image);
-    //Extract results
 
+    //Extract results
     for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++ symbol)
     {
 		
       if(image.symbol_begin() == image.symbol_end())
-        cout << "Failed to check qr code.Please ensure the image is right!";
+        cout << "Faisled to check qr code.Please ensure the image is right!";
 
       else
       {
-        cout << "type:" << endl << symbol->get_type_name() << endl << endl;
-        cout << "decoded:" << endl << symbol->get_data() << endl << endl;
+        cout << "type:" << symbol->get_type_name() << endl;
+        cout << "decoded:" << symbol->get_data() << endl << endl;
       }
 	  
 	  vector<Point> vp;
@@ -328,66 +332,76 @@ void ImageConverter::QRDecode(Mat img)
 	  
 	  for (vector<Point2f>::iterator it = pointBuf.begin(); it != pointBuf.end(); it++)
 	  {
-	  	 cout << "Points:" << *it << endl;
+	  	 //cout << "Points:" << *it << endl;
          circle(img, *it, 3, Scalar(255, 0, 0), -1, 8);
 	  }
 	  
       // Draw location of the symbols found
       if (symbol->get_location_size() == 4)
 	  {
-		line(img, Point(symbol->get_location_x(0), symbol->get_location_y(0)), Point(symbol->get_location_x(1), symbol->get_location_y(1)), Scalar(0, 255, 0), 2, 8, 0);
-		line(img, Point(symbol->get_location_x(1), symbol->get_location_y(1)), Point(symbol->get_location_x(2), symbol->get_location_y(2)), Scalar(0, 255, 0), 2, 8, 0);
-		line(img, Point(symbol->get_location_x(2), symbol->get_location_y(2)), Point(symbol->get_location_x(3), symbol->get_location_y(3)), Scalar(0, 255, 0), 2, 8, 0);
-		line(img, Point(symbol->get_location_x(3), symbol->get_location_y(3)), Point(symbol->get_location_x(0), symbol->get_location_y(0)), Scalar(0, 255, 0), 2, 8, 0);
+		  line(img, Point(symbol->get_location_x(0), symbol->get_location_y(0)), Point(symbol->get_location_x(1), symbol->get_location_y(1)), Scalar(0, 255, 0), 2, 8, 0);
+		  line(img, Point(symbol->get_location_x(1), symbol->get_location_y(1)), Point(symbol->get_location_x(2), symbol->get_location_y(2)), Scalar(0, 255, 0), 2, 8, 0);
+		  line(img, Point(symbol->get_location_x(2), symbol->get_location_y(2)), Point(symbol->get_location_x(3), symbol->get_location_y(3)), Scalar(0, 255, 0), 2, 8, 0);
+		  line(img, Point(symbol->get_location_x(3), symbol->get_location_y(3)), Point(symbol->get_location_x(0), symbol->get_location_y(0)), Scalar(0, 255, 0), 2, 8, 0);
+          //获得四个点的坐标
+          double x0=symbol->get_location_x(0);
+          double y0=symbol->get_location_y(0);
+          double x1=symbol->get_location_x(1);
+          double y1=symbol->get_location_y(1);
+          double x2=symbol->get_location_x(2);
+          double y2=symbol->get_location_y(2);
+          double x3=symbol->get_location_x(3);
+          double y3=symbol->get_location_y(3);
+            
+          //两条对角线的系数和偏移
+          double k1=(y2-y0)/(x2-x0);
+          double b1=(x2*y0-x0*y2)/(x2-x0);
+          double k2=(y3-y1)/(x3-x1);
+          double b2=(x3*y1-x1*y3)/(x3-x1);
+          //两条对角线交点的X坐标
+          double crossX = -(b1-b2)/(k1-k2);
+          double crossY = (k1*b2 - k2 *b1)/(k1-k2);
+
+          double centerX = (x0 + x3)/2;
+          double centerY = (y0 + y3)/2;
+
+          //qr coordinate
+          lineColor = Scalar(0, 0, 255); 
+          DrawArrow(img, Point(crossX, crossY), Point(centerX, centerY), 25, 30, lineColor, 2, CV_AA); 
+          DrawArrow(img, Point(crossX, crossY), Point(crossX, crossY- 200), 25, 30, lineColor, 2, CV_AA); 
+          //L
+          lineColor = Scalar(255, 0, 0); 
+          DrawArrow(img, Point(crossX, crossY), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA); 
+          double L = sqrt(pow(crossX - img.cols/2, 2) + pow(crossY - img.rows/2, 2));
+          //cout << "length = " << L << endl;
+          //caluate the angle
+          Point2f c(crossX, crossY);
+          Point2f pt1(centerX, centerY);
+          Point2f pt2(img.cols/2, img.rows/2);
+          Point2f pt3(crossX, crossY- 200);
+
+          float a1 = GetAngelOfTwoVector(pt1, pt2, c);
+          float a2 = (180 - a1)*CV_PI/180;
+          float a3 = GetAngelOfTwoVector(pt1, pt3, c);
+
+          double x = L * cos(a2);
+          double y = L * sin(a2);
+
+          cout << "Horizontal Proj: " << x << endl;
+          cout << "Vertical Proj:" << y << endl;
+          cout << "Angle:" << a3 << endl<< endl;
+
+          //broadcast tf between qr-cam
+          static tf::TransformBroadcaster br;
+          tf::Transform transform;
+          transform.setOrigin( tf::Vector3(x, y, 0.0) );
+          tf::Quaternion q;
+          q.setRPY(0, 0, a3);
+          transform.setRotation(q);
+          br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_camera", "base_qr"));
 	  }
     
-      //获得四个点的坐标
-      double x0=symbol->get_location_x(0);
-      double y0=symbol->get_location_y(0);
-      double x1=symbol->get_location_x(1);
-      double y1=symbol->get_location_y(1);
-      double x2=symbol->get_location_x(2);
-      double y2=symbol->get_location_y(2);
-      double x3=symbol->get_location_x(3);
-      double y3=symbol->get_location_y(3);
-        
-      //两条对角线的系数和偏移
-      double k1=(y2-y0)/(x2-x0);
-      double b1=(x2*y0-x0*y2)/(x2-x0);
-      double k2=(y3-y1)/(x3-x1);
-      double b2=(x3*y1-x1*y3)/(x3-x1);
-      //两条对角线交点的X坐标
-      double crossX = -(b1-b2)/(k1-k2);
-      double crossY = (k1*b2 - k2 *b1)/(k1-k2);
-
-      double centerX = (x0 + x3)/2;
-      double centerY = (y0 + y3)/2;
-
-      //qr coordinate
-      lineColor = Scalar(0, 0, 255); 
-      DrawArrow(img, Point(crossX, crossY), Point(centerX, centerY), 25, 30, lineColor, 2, CV_AA); 
-      DrawArrow(img, Point(crossX, crossY), Point(crossX, crossY- 200), 25, 30, lineColor, 2, CV_AA); 
-      //L
-      lineColor = Scalar(255, 0, 0); 
-      DrawArrow(img, Point(crossX, crossY), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA); 
-      double L = sqrt(pow(crossX - img.cols/2, 2) + pow(crossY - img.rows/2, 2));
-      cout << "length = " << L << endl;
-      //caluate the angle
-      Point2f c(crossX, crossY);
-      Point2f pt1(centerX, centerY);
-      Point2f pt2(img.cols/2, img.rows/2);
-      Point2f pt3(crossX, crossY- 200);
-
-      float a1 = GetAngelOfTwoVector(pt1, pt2, c);
-      float a2 = (180 - a1)*CV_PI/180;
-      float a3 = GetAngelOfTwoVector(pt1, pt3, c);
-
-      double x = L * cos(a2);
-      double y = L * sin(a1);
-
-      cout << "Horizontal Proj: " << x << endl;
-      cout << "Vertical Proj:" << y << endl;
-      cout << "Angle:" << a3 << endl;
+      
     }
     //imshow("final", frame);
     imshow("captured", img);
