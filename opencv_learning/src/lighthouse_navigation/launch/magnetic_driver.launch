@@ -1,0 +1,13 @@
+<launch>
+   
+  <node name="magnetic_driver" pkg="lighthouse_navigation" type="magnetic_driver" output="screen" />
+
+    <param name="serial_dev"                value="/dev/usb_top"     type="string"/>
+
+    <param name="magnetic_type"             value="POINT_8"           type="string"/>
+    <!--param name="magnetic_type"          value="POINT_16"          type="string"/-->
+
+    <param name="magnetic_mode"             value="POINT_IO"         type="string"/>
+    <!--param name="magnetic_mode"          value="POINT_INTENSITY"  type="string"/-->
+  
+</launch>

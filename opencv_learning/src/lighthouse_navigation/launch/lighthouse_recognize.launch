@@ -1,0 +1,33 @@
+<launch>
+  <node pkg="lighthouse_navigation" type="lighthouse_recognize" name="lighthouse_recognize" output="screen">
+
+    <!--Triangle board param-->
+    <param name="triangle_angle_included"                      value="125.0"  type="double"/>
+
+    <!--laser resolution 0.25-->
+    <param name="max_distance_of_point_to_line"                value="0.013"  type="double"/>
+    <param name="point_num_of_next_several_point"              value="10"     type="int"/>
+
+    <!--laser resolution 0.5-->
+    <!--param name="max_distance_of_point_to_line"                value="0.0208" type="double"/>
+    <param name="point_num_of_next_several_point"              value="8"      type="int"/-->
+
+    <param name="max_detecte_distance_triangle_to_laser"       value="1.5"    type="double"/>
+    <param name="max_detecte_angle_triangle_to_laser"          value="150.0"  type="double"/>
+    <param name="num_of_point_first_fit_used"                  value="4"      type="int"/>
+    <param name="triangle_angle_extend_threshold_value"        value="13"     type="int"/>
+    <param name="min_continuity_point_num_consider_line_far"   value="12"     type="int"/>
+    <param name="min_continuity_point_num_consider_line_near"  value="30"     type="int"/>
+    <param name="line_cross_tolerate_discontinuity_point"      value="14"     type="int"/>
+    <param name="line_cross_tolerate_offset_angle"             value="10.0"    type="double"/>
+
+    <param name="min_intensite_consider_reflector_point"       value="3000"  type="int"/>
+    <param name="min_point_num_consider_belt"                  value="10"     type="int"/>
+    <param name="max_detecte_angle_belt_to_laser"              value="150.0"  type="double"/>
+    <param name="max_detecte_distance_belt_to_laser"           value="7.0"   type="double"/>
+    <param name="max_tolerate_diff_belt_length_detected"       value="0.2"   type="double"/>
+
+    <param name="lighthouse_extend_angle"                      value="10"      type="int"/>
+
+  </node>
+</launch>

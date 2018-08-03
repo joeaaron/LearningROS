@@ -226,7 +226,7 @@ float ImageConverter::GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c
     if (theta < -CV_PI)
         theta += 2 * CV_PI;
  
-    theta = theta * 180.0 / CV_PI;
+   // theta = theta * 180.0 / CV_PI;
     return theta;
 }
 
@@ -381,22 +381,25 @@ void ImageConverter::QRDecode(Mat img)
           Point2f pt3(crossX, crossY- 200);
 
           float a1 = GetAngelOfTwoVector(pt1, pt2, c);
-          float a2 = (180 - a1)*CV_PI/180;
+          float a2 = CV_PI - a1;
           float a3 = GetAngelOfTwoVector(pt1, pt3, c);
 
           double x = L * cos(a2);
           double y = L * sin(a2);
 
-          cout << "Horizontal Proj: " << x << endl;
-          cout << "Vertical Proj:" << y << endl;
-          cout << "Angle:" << a3 << endl<< endl;
+          double qr_tf_x = x / 409.105645;
+          double qr_tf_y = y / 408.708486;
+          double qr_tf_angle = a3;
 
+          cout << "Horizontal Proj: " << qr_tf_x << endl;
+          cout << "Vertical Proj:" << qr_tf_y << endl;
+          cout << "Angle:" << qr_tf_angle << endl<< endl;
           //broadcast tf between qr-cam
           static tf::TransformBroadcaster br;
           tf::Transform transform;
-          transform.setOrigin( tf::Vector3(x, y, 0.0) );
+          transform.setOrigin( tf::Vector3(-qr_tf_y+0.7, -qr_tf_x, 0.0) );
           tf::Quaternion q;
-          q.setRPY(0, 0, a3);
+          q.setRPY(0, 0, qr_tf_angle);
           transform.setRotation(q);
           br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_camera", "base_qr"));
 	  }

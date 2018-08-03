@@ -24,7 +24,7 @@ bool QRLocation::init(int webcamIndex,double hViewAngle,bool debugUI)
 
 bool QRLocation::getQRPose(QRPose_t* qrPose)
 {
-    //从摄像头中抓取一帧
+    //cap frame from camera
     IplImage* frame=cvQueryFrame(capture);
     //图像为空
     if(!frame)

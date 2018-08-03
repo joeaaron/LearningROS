@@ -1,0 +1,53 @@
+waypoints:
+  - name: shell_pose_in_map_ok
+    goal_timeout: 2
+    type: shell
+  - name: dynparam_triangle
+    dynparam_type: str
+    node: /triangle_recognize
+    param: type_and_one_side_length
+    type: dynparam
+    value: 'triangle:0.24'
+  - name: dynparam_reflector
+    dynparam_type: str
+    node: /reflector_recognize
+    param: type_and_one_side_length
+    type: dynparam
+    value: 'reflector:0.2'
+  - name: dynparam_lighthouse_tri
+    dynparam_type: str
+    node: /lighthouse_recognize
+    param: type_and_one_side_length
+    type: dynparam
+    value: 'triangle:0.24'
+  - name: dynparam_lighthouse_ref
+    dynparam_type: str
+    node: /lighthouse_recognize
+    param: type_and_one_side_length
+    type: dynparam
+    value: 'reflector:0.2'
+  - name: shell_target_offset
+    goal_timeout: 2
+    type: shell
+  - name: lighthouse_planner_finish
+    close_enough: 0
+    failure_mode: LOOP
+    goal_timeout: 0
+    type: subscriber
+  - name: shell_pose_in_map_stop
+    goal_timeout: 2
+    type: shell
+  - name: sleep2s
+    close_enough: 0
+    failure_mode: NONE
+    goal_timeout: 2
+    type: timer
+trajectories:
+  - name: lighthouse_test
+    waypoints:
+    - shell_pose_in_map_ok#发布lighthouse在map里的位置
+    - dynparam_lighthouse_reflector#动态参数lighthouse type和半边的长度(这里是以总长40cm的反光板为例)
+    - sleep2s
+    - shell_target_offset#发布目标点在lighthouse坐标系下的坐标
+    - lighthouse_planner_finish#waypoints订阅对接完成信息
+    - shell_pose_in_map_stop#对接完成，发布非法pose，停止识别

@@ -1,0 +1,73 @@
+20180613北阳UST-20LX雷达测试反光板识别精度：
+-------get belt pose ok----------x: 0.78758 y: 0.00041 angle -1.15559
+range x: 1.02808 - 1.02604  =  0.00204062
+range y: 0.000504772 - -0.00316442  =  0.00366919
+range theta: -0.798225 - -1.45241  =  0.654181
+standard_deviation_pose2d.x: 0.00044436
+standard_deviation_pose2d.y: 0.000920681
+standard_deviation_pose2d.theta: 0.106496
+
+-------get belt pose ok----------x: 0.83691 y: 0.60840 angle 34.95282
+range x: 1.08199 - 1.07542  =  0.00657235
+range y: 0.611935 - 0.606042  =  0.00589367
+range theta: 35.4149 - 34.6504  =  0.764527
+standard_deviation_pose2d.x: 0.00130079
+standard_deviation_pose2d.y: 0.00102395
+standard_deviation_pose2d.theta: 0.117923
+
+-------get belt pose ok----------x: 0.06511 y: 1.01677 angle 89.01047
+range x: 0.307465 - 0.304769  =  0.00269576
+range y: 1.01779 - 1.01248  =  0.00530146
+range theta: 89.3291 - 88.5778  =  0.751339
+standard_deviation_pose2d.x: 0.000354998
+standard_deviation_pose2d.y: 0.00200153
+standard_deviation_pose2d.theta: 0.127127
+
+20180613北阳UST-20LX雷达测试三角板识别精度：
+  position: 
+    x: 0.830579136442
+    y: -0.0141709640446
+    z: 0.0
+  orientation:
+    x: 0.0
+    y: 0.0
+    z: -0.0173765687999
+    w: 0.99984901603
+range x: 0.832751 - 0.827466  =  0.00528425
+range y: -0.00759208 - -0.016846  =  0.00925396
+range theta: -0.778034 - -2.78894  =  2.01091
+standard_deviation_pose2d.x: 0.000804618
+standard_deviation_pose2d.y: 0.00139487
+standard_deviation_pose2d.theta: 0.267461
+
+  position: 
+    x: 0.627305268787
+    y: 0.42749127559
+    z: 0.0
+  orientation:
+    x: 0.0
+    y: 0.0
+    z: 0.393059233922
+    w: 0.919513153048
+range x: 0.632636 - 0.624087  =  0.00854949
+range y: 0.430435 - 0.420785  =  0.0096501
+range theta: 46.8734 - 44.8548  =  2.0186
+standard_deviation_pose2d.x: 0.00133671
+standard_deviation_pose2d.y: 0.00154365
+standard_deviation_pose2d.theta: 0.336551
+
+  position: 
+    x: 0.319947277815
+    y: 0.599272808674
+    z: 0.0
+  orientation: 
+    x: 0.0
+    y: 0.0
+    z: 0.699462198383
+    w: 0.71466959711
+range x: 0.323658 - 0.305593  =  0.0180649
+range y: 0.608757 - 0.596653  =  0.0121034
+range theta: 94.3164 - 87.8412  =  6.47523
+standard_deviation_pose2d.x: 0.00221086
+standard_deviation_pose2d.y: 0.00116774
+standard_deviation_pose2d.theta: 0.484564
