@@ -14,6 +14,7 @@
 
 #include <zbar.h>
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <math.h>
 
@@ -25,7 +26,7 @@ using namespace zbar;
 class ImageConverter
 {
 public:
-    ImageConverter(ros::NodeHandle nh,const string& calibFile);
+    ImageConverter(ros::NodeHandle nh,const string& calibFile, const string& imgCloudPointsFile);
  
     ~ImageConverter(){}
  
@@ -59,8 +60,11 @@ private:
     vector<Point3f> m_markerCorners3d;  
     Mat m_camMat;
     Mat m_distCoeff;
-    string _calibFile;              //cameta laser calibration file
+    double unit_x; 
+    double unit_y;
 
+    string _calibFile;              //cameta laser calibration file
+    ofstream sampleRead;     //QR code board center points in image and laser coordinate
     Scalar lineColor;
 };
 

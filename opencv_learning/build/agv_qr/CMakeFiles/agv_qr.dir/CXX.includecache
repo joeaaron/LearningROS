@@ -29,6 +29,8 @@ zbar.h
 -
 iostream
 -
+fstream
+-
 iomanip
 -
 math.h

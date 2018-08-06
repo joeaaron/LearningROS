@@ -4,10 +4,11 @@ RNG rng(12345);
 #define CAMERAMAT "CameraMat"
 #define DISTCOEFF "DistCoeff"
 
-ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile)
+ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile, const string& saveFile)
 	: it(nh),
 	_calibFile(calibFile),
-    lineColor(255, 255, 255)
+  sampleRead(saveFile.c_str()),
+  lineColor(255, 255, 255)
 {
 	readParameters();  //when it should be used.
     /*
@@ -196,8 +197,8 @@ int ImageConverter::readCalibPara(string filename)
     fs[CAMERAMAT]>>m_camMat;
     fs[DISTCOEFF]>>m_distCoeff;
 
-    double unit_x = m_camMat.at<double>(0, 0);
-    double unit_y = m_camMat.at<double>(1, 1);
+    unit_x = m_camMat.at<double>(0, 0); //if calibrated right, the effect will be good.
+    unit_y = m_camMat.at<double>(1, 1);
     cout <<  "dx= " << unit_x << endl << "dy= "<< unit_y<<endl;
 }
 
@@ -319,30 +320,30 @@ void ImageConverter::QRDecode(Mat img)
         cout << "decoded:" << symbol->get_data() << endl << endl;
       }
 	  
-	  vector<Point> vp;
+  	  vector<Point> vp;
       vector<Point2f> pointBuf;
-	  int n = symbol->get_location_size();
-	  for (int i = 0; i < n; i++)
-	  {
-	     vp.push_back(Point(symbol->get_location_x(i),symbol->get_location_y(i)));
-         pointBuf.push_back(vp[i]);
-	  }    
-      //cornerSubPix(img, pointBuf, Size(5, 5), Size(-1, -1));
-	  //EstimatePosition(pointBuf);
-	  
-	  for (vector<Point2f>::iterator it = pointBuf.begin(); it != pointBuf.end(); it++)
-	  {
-	  	 //cout << "Points:" << *it << endl;
-         circle(img, *it, 3, Scalar(255, 0, 0), -1, 8);
-	  }
+  	  int n = symbol->get_location_size();
+  	  for (int i = 0; i < n; i++)
+  	  {
+  	     vp.push_back(Point(symbol->get_location_x(i),symbol->get_location_y(i)));
+           pointBuf.push_back(vp[i]);
+  	  }    
+        //cornerSubPix(img, pointBuf, Size(5, 5), Size(-1, -1));
+  	  //EstimatePosition(pointBuf);
+  	  
+  	  for (vector<Point2f>::iterator it = pointBuf.begin(); it != pointBuf.end(); it++)
+  	  {
+  	  	 //cout << "Points:" << *it << endl;
+           circle(img, *it, 3, Scalar(255, 0, 0), -1, 8);
+  	  }
 	  
       // Draw location of the symbols found
       if (symbol->get_location_size() == 4)
-	  {
-		  line(img, Point(symbol->get_location_x(0), symbol->get_location_y(0)), Point(symbol->get_location_x(1), symbol->get_location_y(1)), Scalar(0, 255, 0), 2, 8, 0);
-		  line(img, Point(symbol->get_location_x(1), symbol->get_location_y(1)), Point(symbol->get_location_x(2), symbol->get_location_y(2)), Scalar(0, 255, 0), 2, 8, 0);
-		  line(img, Point(symbol->get_location_x(2), symbol->get_location_y(2)), Point(symbol->get_location_x(3), symbol->get_location_y(3)), Scalar(0, 255, 0), 2, 8, 0);
-		  line(img, Point(symbol->get_location_x(3), symbol->get_location_y(3)), Point(symbol->get_location_x(0), symbol->get_location_y(0)), Scalar(0, 255, 0), 2, 8, 0);
+	    {
+    		  line(img, Point(symbol->get_location_x(0), symbol->get_location_y(0)), Point(symbol->get_location_x(1), symbol->get_location_y(1)), Scalar(0, 255, 0), 2, 8, 0);
+    		  line(img, Point(symbol->get_location_x(1), symbol->get_location_y(1)), Point(symbol->get_location_x(2), symbol->get_location_y(2)), Scalar(0, 255, 0), 2, 8, 0);
+    		  line(img, Point(symbol->get_location_x(2), symbol->get_location_y(2)), Point(symbol->get_location_x(3), symbol->get_location_y(3)), Scalar(0, 255, 0), 2, 8, 0);
+    		  line(img, Point(symbol->get_location_x(3), symbol->get_location_y(3)), Point(symbol->get_location_x(0), symbol->get_location_y(0)), Scalar(0, 255, 0), 2, 8, 0);
           //获得四个点的坐标
           double x0=symbol->get_location_x(0);
           double y0=symbol->get_location_y(0);
@@ -387,13 +388,15 @@ void ImageConverter::QRDecode(Mat img)
           double x = L * cos(a2);
           double y = L * sin(a2);
 
-          double qr_tf_x = x / 409.105645;
-          double qr_tf_y = y / 408.708486;
+          double qr_tf_x = x / unit_x;
+          double qr_tf_y = y / unit_y; 
           double qr_tf_angle = a3;
 
           cout << "Horizontal Proj: " << qr_tf_x << endl;
           cout << "Vertical Proj:" << qr_tf_y << endl;
           cout << "Angle:" << qr_tf_angle << endl<< endl;
+
+          sampleRead<< qr_tf_x <<" "<< qr_tf_y <<" "<< qr_tf_angle <<endl;
           //broadcast tf between qr-cam
           static tf::TransformBroadcaster br;
           tf::Transform transform;
@@ -402,9 +405,8 @@ void ImageConverter::QRDecode(Mat img)
           q.setRPY(0, 0, qr_tf_angle);
           transform.setRotation(q);
           br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_camera", "base_qr"));
-	  }
+	    }
     
-      
     }
     //imshow("final", frame);
     imshow("captured", img);
