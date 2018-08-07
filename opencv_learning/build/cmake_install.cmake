@@ -118,6 +118,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/aaron/JA/code/LearningROS/opencv_learning/build/gtest/cmake_install.cmake")
   include("/home/aaron/JA/code/LearningROS/opencv_learning/build/agv_qr/cmake_install.cmake")
+  include("/home/aaron/JA/code/LearningROS/opencv_learning/build/usb_cam/cmake_install.cmake")
   include("/home/aaron/JA/code/LearningROS/opencv_learning/build/zbar_opencv/cmake_install.cmake")
 
 endif()

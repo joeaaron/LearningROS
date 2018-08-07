@@ -26,10 +26,10 @@ using namespace zbar;
 class ImageConverter
 {
 public:
-    ImageConverter(ros::NodeHandle nh,const string& calibFile, const string& imgCloudPointsFile);
- 
+    ImageConverter(ros::NodeHandle nh,const string& calibFile, const string& saveFile);
+
     ~ImageConverter(){}
- 
+
     //订阅回调函数
     void imageCb(const sensor_msgs::ImageConstPtr& msg);
 private:
@@ -42,7 +42,7 @@ private:
     int readCalibPara(string filename);
     void EstimatePosition(vector<Point2f> points);
     vector<float> rotationMatrixToEulerAngles(Mat& R, vector<float>& angle);
-    void DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,             
+    void DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
     Scalar& color, int thickness, int lineType);
     float GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c);
 private:
@@ -57,10 +57,10 @@ private:
 
     Size m_markerSize;
     vector<Point2f> m_markerCorners2d;  // marker's 4 corners projection
-    vector<Point3f> m_markerCorners3d;  
+    vector<Point3f> m_markerCorners3d;
     Mat m_camMat;
     Mat m_distCoeff;
-    double unit_x; 
+    double unit_x;
     double unit_y;
 
     string _calibFile;              //cameta laser calibration file

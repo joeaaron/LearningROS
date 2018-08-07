@@ -4,13 +4,13 @@ RNG rng(12345);
 #define CAMERAMAT "CameraMat"
 #define DISTCOEFF "DistCoeff"
 
-ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile, const string& saveFile)
+ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile,const string& saveFile)
 	: it(nh),
 	_calibFile(calibFile),
   sampleRead(saveFile.c_str()),
   lineColor(255, 255, 255)
 {
-	readParameters();  //when it should be used.
+	 readParameters();  //when it should be used.
     /*
     m_camMat = (Mat_<float>(3, 3) << 0, 0, 0,
                                     0, 0, 0,
@@ -204,7 +204,7 @@ int ImageConverter::readCalibPara(string filename)
 
 void ImageConverter::ProcessFrame(cv_bridge::CvImagePtr cv_ptr)
 {
-	Mat img;
+	  Mat img;
     img = cv_ptr->image;
     if (img.empty())
     {

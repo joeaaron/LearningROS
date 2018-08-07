@@ -6,4 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs(gtest)
 subdirs(agv_qr)
+subdirs(usb_cam)
 subdirs(zbar_opencv)
