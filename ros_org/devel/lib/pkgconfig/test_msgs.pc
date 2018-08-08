@@ -1,0 +1,8 @@
+prefix=/home/aaron/JA/code/LearningROS/ros_org/devel
+
+Name: test_msgs
+Description: Description of test_msgs
+Version: 0.0.0
+Cflags: -I/home/aaron/JA/code/LearningROS/ros_org/devel/include
+Libs: -L/home/aaron/JA/code/LearningROS/ros_org/devel/lib 
+Requires: message_runtime

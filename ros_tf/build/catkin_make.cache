@@ -1,2 +1,0 @@
-robot_setup_tf
--DCATKIN_DEVEL_PREFIX=/home/aaron/JA/code/LearningROS/ros_tf/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/JA/code/LearningROS/ros_tf/install -G Unix Makefiles

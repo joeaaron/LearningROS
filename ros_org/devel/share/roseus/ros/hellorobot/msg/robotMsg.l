@@ -1,0 +1,111 @@
+;; Auto-generated. Do not edit!
+
+
+(when (boundp 'hellorobot::robotMsg)
+  (if (not (find-package "HELLOROBOT"))
+    (make-package "HELLOROBOT"))
+  (shadow 'robotMsg (find-package "HELLOROBOT")))
+(unless (find-package "HELLOROBOT::ROBOTMSG")
+  (make-package "HELLOROBOT::ROBOTMSG"))
+
+(in-package "ROS")
+;;//! \htmlinclude robotMsg.msg.html
+(if (not (find-package "STD_MSGS"))
+  (ros::roseus-add-msgs "std_msgs"))
+
+
+(defclass hellorobot::robotMsg
+  :super ros::object
+  :slots (_header _name _id ))
+
+(defmethod hellorobot::robotMsg
+  (:init
+   (&key
+    ((:header __header) (instance std_msgs::Header :init))
+    ((:name __name) "")
+    ((:id __id) 0)
+    )
+   (send-super :init)
+   (setq _header __header)
+   (setq _name (string __name))
+   (setq _id (round __id))
+   self)
+  (:header
+   (&rest __header)
+   (if (keywordp (car __header))
+       (send* _header __header)
+     (progn
+       (if __header (setq _header (car __header)))
+       _header)))
+  (:name
+   (&optional __name)
+   (if __name (setq _name __name)) _name)
+  (:id
+   (&optional __id)
+   (if __id (setq _id __id)) _id)
+  (:serialization-length
+   ()
+   (+
+    ;; std_msgs/Header _header
+    (send _header :serialization-length)
+    ;; string _name
+    4 (length _name)
+    ;; int32 _id
+    4
+    ))
+  (:serialize
+   (&optional strm)
+   (let ((s (if strm strm
+              (make-string-output-stream (send self :serialization-length)))))
+     ;; std_msgs/Header _header
+       (send _header :serialize s)
+     ;; string _name
+       (write-long (length _name) s) (princ _name s)
+     ;; int32 _id
+       (write-long _id s)
+     ;;
+     (if (null strm) (get-output-stream-string s))))
+  (:deserialize
+   (buf &optional (ptr- 0))
+   ;; std_msgs/Header _header
+     (send _header :deserialize buf ptr-) (incf ptr- (send _header :serialization-length))
+   ;; string _name
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _name (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; int32 _id
+     (setq _id (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;;
+   self)
+  )
+
+(setf (get hellorobot::robotMsg :md5sum-) "e29cd348083eeece3acb349d73ceb1cf")
+(setf (get hellorobot::robotMsg :datatype-) "hellorobot/robotMsg")
+(setf (get hellorobot::robotMsg :definition-)
+      "Header header
+string name
+int32 id
+
+================================================================================
+MSG: std_msgs/Header
+# Standard metadata for higher-level stamped data types.
+# This is generally used to communicate timestamped data 
+# in a particular coordinate frame.
+# 
+# sequence ID: consecutively increasing ID 
+uint32 seq
+#Two-integer timestamp that is expressed as:
+# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
+# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
+# time-handling sugar is provided by the client library
+time stamp
+#Frame this data is associated with
+# 0: no frame
+# 1: global frame
+string frame_id
+
+")
+
+
+
+(provide :hellorobot/robotMsg "e29cd348083eeece3acb349d73ceb1cf")
+
+

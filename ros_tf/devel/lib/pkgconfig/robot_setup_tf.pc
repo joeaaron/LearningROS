@@ -1,8 +1,0 @@
-prefix=/home/aaron/JA/code/LearningROS/ros_tf/devel
-
-Name: robot_setup_tf
-Description: Description of robot_setup_tf
-Version: 0.0.0
-Cflags: -I/home/aaron/JA/code/LearningROS/ros_tf/src/robot_setup_tf/include
-Libs: -L/home/aaron/JA/code/LearningROS/ros_tf/devel/lib 
-Requires: 
