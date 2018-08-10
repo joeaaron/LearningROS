@@ -9,8 +9,19 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   tf
+  message_generation
 )
- 
+
+## Generate message in the 'msg' folder
+add_message_files(
+    FILES
+    qrMsg.msg
+    )
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+    DEPENDENCIES
+    std_msgs
+    )
 find_package(PkgConfig)
 pkg_check_modules(PC_ZBAR QUIET zbar)
 set(ZBAR_DEFINITIONS ${PC_ZBAR_CFLAGS_OTHER})
@@ -24,6 +35,7 @@ find_package_handle_standard_args(ZBAR  DEFAULT_MSG  ZBAR_LIBRARIES ZBAR_INCLUDE
 catkin_package(
  INCLUDE_DIRS include
   LIBRARIES agv_qr
+  CATKIN_DEPENDS message_runtime
 )
 include_directories(
     include

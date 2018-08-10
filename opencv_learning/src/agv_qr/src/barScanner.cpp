@@ -58,10 +58,10 @@ double ImageConverter::GetDistance (CvPoint pointO,CvPoint pointA )
     double distance;
     distance = powf((pointO.x - pointA.x),2) + powf((pointO.y - pointA.y),2);
     distance = sqrtf(distance);
- 
+
     return distance;
 }
- 
+
 void ImageConverter::CheckCenter(vector<vector<Point> >c, vector<int>& index)
 {
     float dmin1=10000;
@@ -83,7 +83,7 @@ void ImageConverter::CheckCenter(vector<vector<Point> >c, vector<int>& index)
                     index[3]=index[1];
                     index[0]=i;
                     index[1]=j;
- 
+
                 }
                 else
                 {
@@ -109,9 +109,9 @@ inline bool isRotationMatrix(Mat& R)
 vector<float> ImageConverter::rotationMatrixToEulerAngles(Mat& R, vector<float>& angle)
 {
   	angle.clear();
-   
+
   	assert(isRotationMatrix(R));
-      
+
   	float sy = sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
   	bool singular = sy < 1e-6;
   	float x, y, z;
@@ -133,7 +133,7 @@ vector<float> ImageConverter::rotationMatrixToEulerAngles(Mat& R, vector<float>&
   	roll = y / CV_PI * 180;  //rad to angle
   	pitch = x / CV_PI * 180;
   	yaw = z / CV_PI * 180;
-      
+
     angle.push_back(x);
     angle.push_back(y);
     angle.push_back(z);
@@ -149,7 +149,7 @@ vector<_Tp> convertMat2Vector(const Mat &mat)
 }
 
 void ImageConverter::EstimatePosition(vector<Point2f> points)
-{  
+{
     Mat Rvec;
     Mat raux, taux;
     //3d-2d---Sequential correspondence
@@ -161,7 +161,7 @@ void ImageConverter::EstimatePosition(vector<Point2f> points)
     cv::Mat Extrinc(3, 4, Rvec.type()); // Extrinc is 4x4
     Extrinc( cv::Range(0,3), cv::Range(0,3) ) = Rvec * 1; // copies R into Extrinc
     Extrinc( cv::Range(0,3), cv::Range(3,4) ) = taux * 1; // copies tvec into Extrinc
-    
+
     //cout<<"R:"<<Rvec<<endl;
     //cout<<"T:"<<taux <<endl;
     //cout<<"Extrinc: "<<Extrinc << endl;
@@ -182,7 +182,7 @@ void ImageConverter::EstimatePosition(vector<Point2f> points)
 
     broadcaster.sendTransform(
       tf::StampedTransform(
-        transform, 
+        transform,
         ros::Time::now(), "base_camera", "base_qr"));
 }
 
@@ -210,13 +210,13 @@ void ImageConverter::ProcessFrame(cv_bridge::CvImagePtr cv_ptr)
     {
       cout << "no image stream read!Please check the camera first.";
     }
-    
+
     //img coordinate
-    lineColor = Scalar(0, 255, 0); 
-    DrawArrow(img, Point(img.cols/2, img.rows/2), Point(img.cols/2, img.rows/2 - 200), 25, 30, lineColor, 2, CV_AA); 
+    lineColor = Scalar(0, 255, 0);
+    DrawArrow(img, Point(img.cols/2, img.rows/2), Point(img.cols/2, img.rows/2 - 200), 25, 30, lineColor, 2, CV_AA);
 
     QRDecode(img);
-   
+
 }
 
 float ImageConverter::GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
@@ -226,7 +226,7 @@ float ImageConverter::GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c
         theta -= 2 * CV_PI;
     if (theta < -CV_PI)
         theta += 2 * CV_PI;
- 
+
    // theta = theta * 180.0 / CV_PI;
     return theta;
 }
@@ -247,7 +247,7 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
         ROS_ERROR("cv_bridge exception: %s",e.what());
         return;
     }
-   
+
     ProcessFrame(cv_ptr);
     // printf("OK1\n");
     image_pub.publish(cv_ptr->toImageMsg());
@@ -261,29 +261,29 @@ void ImageConverter::GetPoints(Mat img, Point2f points[])
     vector<Vec4i> img_hierarchy;
     cvtColor(img, img_gray, CV_BGR2GRAY);
     threshold(img_gray, img_thresh, 45, 255, THRESH_BINARY);
-    
+
     findContours(img_thresh, img_contour, img_hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
     RotatedRect rectPoint = minAreaRect(img_contour[0]);
     //Point2f points[4];
-    
+
     rectPoint.points(points);
-    
+
 }
 
-void ImageConverter::DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,             
+void ImageConverter::DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
      cv::Scalar& color, int thickness, int lineType)
-{    
-    const double PI = 3.1415926;    
-    Point arrow;    
-    //计算 θ 角（最简单的一种情况在下面图示中已经展示，关键在于 atan2 函数，详情见下面）   
-    double angle = atan2((double)(pStart.y - pEnd.y), (double)(pStart.x - pEnd.x));  
-    line(img, pStart, pEnd, color, thickness, lineType);   
-    //计算箭角边的另一端的端点位置（上面的还是下面的要看箭头的指向，也就是pStart和pEnd的位置） 
-    arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);     
-    arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);  
-    line(img, pEnd, arrow, color, thickness, lineType);   
-    arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);     
-    arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);    
+{
+    const double PI = 3.1415926;
+    Point arrow;
+    //计算 θ 角（最简单的一种情况在下面图示中已经展示，关键在于 atan2 函数，详情见下面）
+    double angle = atan2((double)(pStart.y - pEnd.y), (double)(pStart.x - pEnd.x));
+    line(img, pStart, pEnd, color, thickness, lineType);
+    //计算箭角边的另一端的端点位置（上面的还是下面的要看箭头的指向，也就是pStart和pEnd的位置）
+    arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);
+    arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);
+    line(img, pEnd, arrow, color, thickness, lineType);
+    arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);
+    arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);
     line(img, pEnd, arrow, color, thickness, lineType);
 }
 
@@ -310,7 +310,7 @@ void ImageConverter::QRDecode(Mat img)
     //Extract results
     for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++ symbol)
     {
-		
+
       if(image.symbol_begin() == image.symbol_end())
         cout << "Faisled to check qr code.Please ensure the image is right!";
 
@@ -319,7 +319,7 @@ void ImageConverter::QRDecode(Mat img)
         cout << "type:" << symbol->get_type_name() << endl;
         cout << "decoded:" << symbol->get_data() << endl << endl;
       }
-	  
+
   	  vector<Point> vp;
       vector<Point2f> pointBuf;
   	  int n = symbol->get_location_size();
@@ -327,16 +327,16 @@ void ImageConverter::QRDecode(Mat img)
   	  {
   	     vp.push_back(Point(symbol->get_location_x(i),symbol->get_location_y(i)));
            pointBuf.push_back(vp[i]);
-  	  }    
+  	  }
         //cornerSubPix(img, pointBuf, Size(5, 5), Size(-1, -1));
   	  //EstimatePosition(pointBuf);
-  	  
+
   	  for (vector<Point2f>::iterator it = pointBuf.begin(); it != pointBuf.end(); it++)
   	  {
   	  	 //cout << "Points:" << *it << endl;
            circle(img, *it, 3, Scalar(255, 0, 0), -1, 8);
   	  }
-	  
+
       // Draw location of the symbols found
       if (symbol->get_location_size() == 4)
 	    {
@@ -353,7 +353,7 @@ void ImageConverter::QRDecode(Mat img)
           double y2=symbol->get_location_y(2);
           double x3=symbol->get_location_x(3);
           double y3=symbol->get_location_y(3);
-            
+
           //两条对角线的系数和偏移
           double k1=(y2-y0)/(x2-x0);
           double b1=(x2*y0-x0*y2)/(x2-x0);
@@ -367,12 +367,12 @@ void ImageConverter::QRDecode(Mat img)
           double centerY = (y0 + y3)/2;
 
           //qr coordinate
-          lineColor = Scalar(0, 0, 255); 
-          DrawArrow(img, Point(crossX, crossY), Point(centerX, centerY), 25, 30, lineColor, 2, CV_AA); 
-          DrawArrow(img, Point(crossX, crossY), Point(crossX, crossY- 200), 25, 30, lineColor, 2, CV_AA); 
+          lineColor = Scalar(0, 0, 255);
+          DrawArrow(img, Point(crossX, crossY), Point(centerX, centerY), 25, 30, lineColor, 2, CV_AA);
+          DrawArrow(img, Point(crossX, crossY), Point(crossX, crossY- 200), 25, 30, lineColor, 2, CV_AA);
           //L
-          lineColor = Scalar(255, 0, 0); 
-          DrawArrow(img, Point(crossX, crossY), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA); 
+          lineColor = Scalar(255, 0, 0);
+          DrawArrow(img, Point(crossX, crossY), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA);
           double L = sqrt(pow(crossX - img.cols/2, 2) + pow(crossY - img.rows/2, 2));
           //cout << "length = " << L << endl;
           //caluate the angle
@@ -389,14 +389,14 @@ void ImageConverter::QRDecode(Mat img)
           double y = L * sin(a2);
 
           double qr_tf_x = x / unit_x;
-          double qr_tf_y = y / unit_y; 
+          double qr_tf_y = y / unit_y;
           double qr_tf_angle = a3;
-	  double rot = a3 * 180 /CV_PI;
+	        double rot = a3 * 180 /CV_PI;
 
           cout << "Horizontal Proj: " << qr_tf_x << endl;
           cout << "Vertical Proj:" << qr_tf_y << endl;
           cout << "Angle:" << qr_tf_angle << endl<< endl;
-	  cout << "Rotation:" << rot << endl<< endl;
+	        cout << "Rotation:" << rot << endl<< endl;
 
           sampleRead<< qr_tf_x <<" "<< qr_tf_y <<" "<< qr_tf_angle <<endl;
           //broadcast tf between qr-cam
@@ -408,7 +408,7 @@ void ImageConverter::QRDecode(Mat img)
           transform.setRotation(q);
           br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_camera", "base_qr"));
 	    }
-    
+
     }
     //imshow("final", frame);
     imshow("captured", img);
