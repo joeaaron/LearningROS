@@ -7,7 +7,7 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     ImageConverter imgConverter(nh, argv[1], argv[2]);
 
-    ros::Publisher chatter_pub = nh.advertise<agv_qr::qrMsg>("robotID",1000);
+    ros::Publisher chatter_pub = nh.advertise<agv_qr::qrMsg>("task_switch",1000);
 
 
     ros::Rate loop_rate(11);
@@ -23,9 +23,9 @@ int main(int argc, char **argv)
 
         agv_qr::qrMsg msg;
         msg.header.stamp = ros::Time::now();
-        msg.header.frame_id = "/robot";
+        msg.header.frame_id = "agv_qr";
         msg.id = count;
-        msg.name = "Robot";
+        msg.name = "qr_nav";
 
         //std::stringstream ss;
         //ss << "hello world " << count;
