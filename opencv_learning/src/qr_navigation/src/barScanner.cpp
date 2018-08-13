@@ -396,7 +396,7 @@ void ImageConverter::QRDecode(Mat img)
           cout << "Horizontal Proj: " << qr_tf_x << endl;
           cout << "Vertical Proj:" << qr_tf_y << endl;
           cout << "Angle:" << qr_tf_angle << endl<< endl;
-	        cout << "Rotation:" << rot << endl<< endl;
+	        //cout << "Rotation:" << rot << endl<< endl;
 
           sampleRead<< qr_tf_x <<" "<< qr_tf_y <<" "<< qr_tf_angle <<endl;
           //broadcast tf between qr-cam

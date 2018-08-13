@@ -1,13 +1,13 @@
 #include "barScanner.h"
-#include "agv_qr/qrMsg.h"
+#include "qr_navigation/qrMsg.h"
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "agv_qr");
+    ros::init(argc, argv, "qr_navig");
     ros::NodeHandle nh("~");
     ImageConverter imgConverter(nh, argv[1], argv[2]);
 
-    ros::Publisher chatter_pub = nh.advertise<agv_qr::qrMsg>("task_switch",1000);
+    ros::Publisher chatter_pub = nh.advertise<qr_navigation::qrMsg>("task_switch",1000);
 
 
     ros::Rate loop_rate(11);
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
          */
         //std_msgs::String msg;
 
-        agv_qr::qrMsg msg;
+        qr_navigation::qrMsg msg;
         msg.header.stamp = ros::Time::now();
         msg.header.frame_id = "agv_qr";
         msg.id = count;

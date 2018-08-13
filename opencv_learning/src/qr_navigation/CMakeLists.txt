@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(agv_qr)
+project(qr_navigation)
 set(CMAKE_MODULE_PATH ${ZBARCV_SOURCE_DIR})
 find_package (OpenCV)
 find_package(catkin REQUIRED COMPONENTS
@@ -34,7 +34,7 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(ZBAR  DEFAULT_MSG  ZBAR_LIBRARIES ZBAR_INCLUDE_DIR)
 catkin_package(
  INCLUDE_DIRS include
-  LIBRARIES agv_qr
+  LIBRARIES qr_navig
   CATKIN_DEPENDS message_runtime
 )
 include_directories(
@@ -42,14 +42,14 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
  
-add_executable(agv_qr 
-      src/agv_qr.cpp
+add_executable(qr_navig 
+      src/qr_navig.cpp
       src/barScanner.cpp
 
       include/barScanner.h
 )
 
-target_link_libraries(agv_qr
+target_link_libraries(qr_navig
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
  # ${Zbar_LIBRARIES}

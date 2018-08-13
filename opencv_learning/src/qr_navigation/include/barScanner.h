@@ -63,8 +63,8 @@ private:
     double unit_x;
     double unit_y;
 
-    string _calibFile;              //cameta laser calibration file
-    ofstream sampleRead;     //QR code board center points in image and laser coordinate
+    string _calibFile;       //cameta calibration file
+    ofstream sampleRead;     //save the results
     Scalar lineColor;
 };
 
