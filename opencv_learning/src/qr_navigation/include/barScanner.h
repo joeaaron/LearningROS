@@ -6,6 +6,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <tf/transform_broadcaster.h>
+#include <std_msgs/Header.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -32,6 +33,8 @@ public:
 
     //订阅回调函数
     void imageCb(const sensor_msgs::ImageConstPtr& msg);
+
+    void TaskSwitchCallback(const std_msgs::HeaderPtr &task_switch_msg);
 private:
 	void ProcessFrame(cv_bridge::CvImagePtr cv_ptr);
 	void GetPoints(Mat img, Point2f points[]);
@@ -50,6 +53,7 @@ private:
     image_transport::ImageTransport it;
     image_transport::Subscriber image_sub;
     image_transport::Publisher image_pub;
+    ros::Subscriber task_switch_sub_;
     //tf
     tf::TransformBroadcaster broadcaster;
     tf::Transform transform;
@@ -66,6 +70,8 @@ private:
     string _calibFile;       //cameta calibration file
     ofstream sampleRead;     //save the results
     Scalar lineColor;
+
+    bool run_task;
 };
 
 #endif

@@ -8,7 +8,8 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile,const 
 	: it(nh),
 	_calibFile(calibFile),
   sampleRead(saveFile.c_str()),
-  lineColor(255, 255, 255)
+  lineColor(255, 255, 255),
+  run_task(false)
 {
 	 readParameters();  //when it should be used.
     /*
@@ -32,7 +33,9 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile,const 
 
     //使用image_transport订阅图像话题“in” 和 发布图像话题“out” /camera/rgb/image_raw
     image_sub=it.subscribe("/usb_cam/image_raw",1,&ImageConverter::imageCb,this);
-    image_pub=it.advertise("agv_qr",1);
+    image_pub=it.advertise("qr_navig",1);
+
+    task_switch_sub_ = nh.subscribe("/task_switch", 1, &ImageConverter::TaskSwitchCallback, this );
 
 }
 
@@ -40,6 +43,22 @@ void ImageConverter::readParameters()
 {
     readCalibPara(_calibFile.c_str());
     //it.param("image_sub", image_sub, string("/usb_cam/image_raw"));      //topic name
+}
+
+
+void ImageConverter::TaskSwitchCallback(const std_msgs::HeaderPtr &task_switch_msg)
+{
+    if ( task_switch_msg->frame_id == "qr_navig" || task_switch_msg->frame_id.empty() )
+    {
+        if ( task_switch_msg->seq == 0 )
+        {
+            run_task = false;
+        }
+        else
+        {
+            run_task = true;
+        }
+    }
 }
 
 inline Point CalCenter(vector<vector<Point> > contours, int i)
@@ -247,8 +266,9 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
         ROS_ERROR("cv_bridge exception: %s",e.what());
         return;
     }
-
-    ProcessFrame(cv_ptr);
+    
+    if(run_task)
+      ProcessFrame(cv_ptr);
     // printf("OK1\n");
     image_pub.publish(cv_ptr->toImageMsg());
 }
