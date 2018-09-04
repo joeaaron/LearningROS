@@ -9,7 +9,7 @@ ImageConverter::ImageConverter(ros::NodeHandle nh,const string& calibFile,const 
 	_calibFile(calibFile),
   sampleRead(saveFile.c_str()),
   lineColor(255, 255, 255),
-  run_task(false)
+  run_task(true)
 {
 	 readParameters();  //when it should be used.
     /*
