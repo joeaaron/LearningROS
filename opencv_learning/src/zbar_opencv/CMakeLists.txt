@@ -29,6 +29,8 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
  
+link_directories(libs) 
+
 add_executable(zbar_opencv 
       src/zbar_opencv.cpp
       src/zbarScanner.cpp
@@ -40,6 +42,6 @@ target_link_libraries(zbar_opencv
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
  # ${Zbar_LIBRARIES}
-  /usr/local/lib/libzbar.so##最重要的添加编译用的共享库
+  libzbar.so##最重要的添加编译用的共享库
  
 )

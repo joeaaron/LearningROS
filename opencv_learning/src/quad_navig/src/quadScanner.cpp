@@ -9,12 +9,35 @@
 
 #include "quad_navig/quadScanner.h"
 
-QuadScanner::QuadScanner(ros::NodeHandle nh)
+#define CAMERAMAT "CameraMat"
+#define DISTCOEFF "DistCoeff"
+
+QuadScanner::QuadScanner(ros::NodeHandle nh, const string& calibFile)
 	: it(nh)
 {
+	ReadCalibPara(calibFile.c_str());
 
 	image_sub=it.subscribe("/usb_cam/image_raw",1,&QuadScanner::imageCb,this);
     image_pub=it.advertise("quad_navig",1);
+}
+
+int QuadScanner::ReadCalibPara(string filename)
+{
+	Mat m_camMat;
+	Mat m_distCoeff;
+
+    cv::FileStorage fs(filename,cv::FileStorage::READ);
+    if(!fs.isOpened())
+    {
+        std::cout<<"Invalid calibration filename."<<std::endl;
+        return 0;
+    }
+    fs[CAMERAMAT]>>m_camMat;
+    fs[DISTCOEFF]>>m_distCoeff;
+
+    unit_x = m_camMat.at<double>(0, 0); //if calibrated right, the effect will be good.
+    unit_y = m_camMat.at<double>(1, 1);
+    cout <<  "dx= " << unit_x << endl << "dy= "<< unit_y<<endl;
 }
 
 Vec2d linearParameters(Vec4i line){
@@ -125,12 +148,25 @@ void CalcDstSize(const vector<cv::Point2f>& corners, int& h1, int& h2, int& w1, 
     w2 = sqrt((corners[2].x - corners[3].x)*(corners[2].x - corners[3].x) + (corners[2].y - corners[3].y)*(corners[2].y - corners[3].y));
 }
 
+float GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
+{
+    float theta = atan2(pt1.x - c.x, pt1.y - c.y) - atan2(pt2.x - c.x, pt2.y - c.y);
+    if (theta > CV_PI)
+        theta -= 2 * CV_PI;
+    if (theta < -CV_PI)
+        theta += 2 * CV_PI;
+
+   // theta = theta * 180.0 / CV_PI;
+    return theta;
+}
+
 void QuadScanner::FindCandidate(Mat img, Mat& drawing)
 {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
+
 	findContours(img, contours, hierarchy, CV_RETR_EXTERNAL, CHAIN_APPROX_NONE, Point(0,0));
-	vector<vector<Point> > polyContours;
+	vector<vector<Point> > polyContours(contours.size());
     int maxArea = 0;
 	for(int index = 0; index < contours.size(); index++)
 	{
@@ -225,10 +261,98 @@ void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<P
 				circle(img, crossPoints[i], 10, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
 
 			imshow("Result", img);
+			waitKey(1);
 			flag = true;
 		}
 		flag = false;
 	}
+}
+
+void QuadScanner::DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
+     cv::Scalar& color, int thickness, int lineType)
+{
+    const double PI = 3.1415926;
+    Point arrow;
+    //计算 θ 角（最简单的一种情况在下面图示中已经展示，关键在于 atan2 函数，详情见下面）
+    double angle = atan2((double)(pStart.y - pEnd.y), (double)(pStart.x - pEnd.x));
+    line(img, pStart, pEnd, color, thickness, lineType);
+    //计算箭角边的另一端的端点位置（上面的还是下面的要看箭头的指向，也就是pStart和pEnd的位置）
+    arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);
+    arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);
+    line(img, pEnd, arrow, color, thickness, lineType);
+    arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);
+    arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);
+    line(img, pEnd, arrow, color, thickness, lineType);
+}
+
+void QuadScanner::GetTfTrans(double x,double y, double theta)
+{
+	double quad_tf_x = x / unit_x;
+	double quad_tf_y = y / unit_y;
+	double quad_tf_angle = theta;
+
+	//double rot = theta * 180 /CV_PI;
+	//cout << "Horizontal Proj: " << qr_tf_x << endl;
+	//cout << "Vertical Proj:" << qr_tf_y << endl;
+	//cout << "Angle:" << qr_tf_angle << endl<< endl;
+	//cout << "Rotation:" << rot << endl<< endl;
+
+	//broadcast tf between qr-cam
+	static tf::TransformBroadcaster br;
+	tf::Transform transform;
+	transform.setOrigin( tf::Vector3(-quad_tf_y, -quad_tf_x, 0.0) );
+	tf::Quaternion q;
+	q.setRPY(0, 0, quad_tf_angle);
+	transform.setRotation(q);
+	br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_camera", "base_quad"));
+}
+
+void QuadScanner::GetQuadCamTf(Mat img, vector<Point2f> crossPoints)
+{
+	//获得四个点的坐标
+	vector<double> coordinates_x;
+	vector<double> coordinates_y;
+	for(int i = 0; i < crossPoints.size(); i++)
+	{
+		coordinates_x[i] = crossPoints[i].x;
+		coordinates_y[i] = crossPoints[i].y;
+	}
+
+	//两条对角线的系数和偏移
+	double k1 = (coordinates_y[2] - coordinates_y[0]) / (coordinates_x[2] - coordinates_x[0]);
+	double b1 = (coordinates_x[2] * coordinates_y[0] - coordinates_x[0] * coordinates_y[2]) / (coordinates_x[2] - coordinates_x[0]);
+ 	double k2 = (coordinates_y[3] - coordinates_y[1]) / (coordinates_x[3] - coordinates_x[1]);
+	double b2 = (coordinates_x[3] * coordinates_y[1] - coordinates_x[1] * coordinates_y[3]) / (coordinates_x[3] - coordinates_x[1]);
+
+	//两条对角线交点的X坐标
+	double cross_x = -(b1-b2)/(k1-k2);
+	double cross_y = (k1*b2 - k2 *b1)/(k1-k2);
+
+	double center_x = (coordinates_x[0] + coordinates_x[3]) / 2;
+	double center_y = (coordinates_y[0] + coordinates_y[3]) / 2;
+
+	//quad coordinate
+	Scalar lineColor = Scalar(0, 0, 255);
+	DrawArrow(img, Point(cross_x, cross_y), Point(center_x, center_y), 25, 30, lineColor, 2, CV_AA);
+	DrawArrow(img, Point(cross_x, cross_y), Point(cross_x, cross_y- 200), 25, 30, lineColor, 2, CV_AA);
+	//L
+	lineColor = Scalar(255, 0, 0);
+	DrawArrow(img, Point(cross_x, cross_y), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA);
+	double L = sqrt(pow(cross_x - img.cols/2, 2) + pow(cross_y - img.rows/2, 2));
+
+	Point2f pt0(cross_x, cross_y);
+	Point2f pt1(center_x, center_y);
+	Point2f pt2(img.cols/2, img.rows/2);
+	Point2f pt3(cross_x, cross_y - 200);
+
+	float a1 = GetAngelOfTwoVector(pt1, pt2, pt0);
+	float a2 = CV_PI - a1;
+	float a3 = GetAngelOfTwoVector(pt1, pt3, pt0);
+
+	double x = L * cos(a2);
+	double y = L * sin(a2);
+
+	GetTfTrans(x, y, a3);
 }
 
 /**
@@ -253,20 +377,21 @@ void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)
 
 	threshold(s, s, 0.3, 255, THRESH_BINARY);
 	s.convertTo(s, CV_8U, 1, 0);
-    Mat drawing = Mat::zeros(img.size(), CV_8UC3);
+	Mat drawing = Mat::zeros(img.size(), CV_8UC3);
 	FindCandidate(s, drawing);
 
 	cvtColor(drawing, drawing, CV_BGR2GRAY);
-    std::vector<Vec4i> reducedLines;
+	std::vector<Vec4i> reducedLines;
 	LineDetection(drawing, reducedLines);
 
-	bool bQuad;
-    vector<Point2f> crossPoints;
+	bool bQuad = false;
+	vector<Point2f> crossPoints;
 	IsQuad(img, reducedLines, bQuad, crossPoints);
 
 	if(bQuad)
 	{
 		//pub tf
+		GetQuadCamTf(img, crossPoints);
 	}
 }
 

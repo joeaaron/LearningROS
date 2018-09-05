@@ -17,6 +17,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 find_package(OpenCV)
 
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES quad_navig
+  # CATKIN_DEPENDS message_runtime
+)
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}

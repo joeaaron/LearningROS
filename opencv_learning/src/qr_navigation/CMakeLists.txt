@@ -45,7 +45,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-#link_directories(libs) 
+link_directories(libs) 
 
 add_executable(qr_navig 
       src/qr_navig.cpp

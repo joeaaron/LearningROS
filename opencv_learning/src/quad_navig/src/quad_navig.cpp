@@ -4,7 +4,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "quad_navig");
     ros::NodeHandle nh("~");
-    QuadScanner quadScanner(nh);
+    QuadScanner quadScanner(nh, argv[1]);
 
 
     ros::Rate loop_rate(10);

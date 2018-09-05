@@ -1,0 +1,20 @@
+<!-- -->
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video1" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>
+  
+  <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/usb_cam/image_raw"/>
+    <param name="autosize" value="true" />
+  </node>
+
+  <node pkg="quad_navig" type="quad_navig" name="quad_navig" args="$(find quad_navig)/../data/param/calib.yml" output="screen">
+	  <param name="image_sub" type="string" value="/usb_cam/image_raw"/>		
+  </node>
+</launch>

@@ -1,5 +1,4 @@
 #include "barScanner.h"
-#include "qr_navigation/qrMsg.h"
 
 int main(int argc, char **argv)
 {
