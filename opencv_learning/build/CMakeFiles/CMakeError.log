@@ -1,22 +1,22 @@
 Determining if the pthread_create exist failed with the following output:
 Change Dir: /home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_1fb1f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_1fb1f.dir/build.make CMakeFiles/cmTC_1fb1f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_ca24b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ca24b.dir/build.make CMakeFiles/cmTC_ca24b.dir/build
 make[1]: Entering directory '/home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_1fb1f.dir/CheckSymbolExists.c.o
-/usr/bin/cc     -o CMakeFiles/cmTC_1fb1f.dir/CheckSymbolExists.c.o   -c /home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_1fb1f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1fb1f.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTC_1fb1f.dir/CheckSymbolExists.c.o  -o cmTC_1fb1f -rdynamic 
-CMakeFiles/cmTC_1fb1f.dir/CheckSymbolExists.c.o: In function `main':
+Building C object CMakeFiles/cmTC_ca24b.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_ca24b.dir/CheckSymbolExists.c.o   -c /home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ca24b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca24b.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_ca24b.dir/CheckSymbolExists.c.o  -o cmTC_ca24b -rdynamic 
+CMakeFiles/cmTC_ca24b.dir/CheckSymbolExists.c.o: In function `main':
 CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_1fb1f.dir/build.make:97: recipe for target 'cmTC_1fb1f' failed
-make[1]: *** [cmTC_1fb1f] Error 1
+CMakeFiles/cmTC_ca24b.dir/build.make:97: recipe for target 'cmTC_ca24b' failed
+make[1]: *** [cmTC_ca24b] Error 1
 make[1]: Leaving directory '/home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_1fb1f/fast' failed
-make: *** [cmTC_1fb1f/fast] Error 2
+Makefile:126: recipe for target 'cmTC_ca24b/fast' failed
+make: *** [cmTC_ca24b/fast] Error 2
 
 File /home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
@@ -36,20 +36,20 @@ int main(int argc, char** argv)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_40f80/fast"
-/usr/bin/make -f CMakeFiles/cmTC_40f80.dir/build.make CMakeFiles/cmTC_40f80.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_25a9b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_25a9b.dir/build.make CMakeFiles/cmTC_25a9b.dir/build
 make[1]: Entering directory '/home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_40f80.dir/CheckFunctionExists.c.o
-/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_40f80.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
-Linking C executable cmTC_40f80
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_40f80.dir/link.txt --verbose=1
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_40f80.dir/CheckFunctionExists.c.o  -o cmTC_40f80 -rdynamic -lpthreads 
+Building C object CMakeFiles/cmTC_25a9b.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_25a9b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_25a9b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_25a9b.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_25a9b.dir/CheckFunctionExists.c.o  -o cmTC_25a9b -rdynamic -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_40f80.dir/build.make:97: recipe for target 'cmTC_40f80' failed
-make[1]: *** [cmTC_40f80] Error 1
+CMakeFiles/cmTC_25a9b.dir/build.make:97: recipe for target 'cmTC_25a9b' failed
+make[1]: *** [cmTC_25a9b] Error 1
 make[1]: Leaving directory '/home/aaron/JA/code/LearningROS/opencv_learning/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_40f80/fast' failed
-make: *** [cmTC_40f80/fast] Error 2
+Makefile:126: recipe for target 'cmTC_25a9b/fast' failed
+make: *** [cmTC_25a9b/fast] Error 2
 
 

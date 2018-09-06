@@ -1,8 +1,0 @@
-prefix=/home/aaron/JA/code/LearningROS/opencv_learning/install
-
-Name: lighthouse_navigation
-Description: Description of lighthouse_navigation
-Version: 0.0.0
-Cflags: -I/home/aaron/JA/code/LearningROS/opencv_learning/install/include
-Libs: -L/home/aaron/JA/code/LearningROS/opencv_learning/install/lib 
-Requires: roscpp geometry_msgs message_runtime

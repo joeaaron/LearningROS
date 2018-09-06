@@ -1,2 +1,2 @@
-agv_qr:usb_cam:zbar_opencv
--DCATKIN_DEVEL_PREFIX=/home/aaron/JA/code/LearningROS/opencv_learning/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/JA/code/LearningROS/opencv_learning/install -G Unix Makefiles
+qr_navigation:quad_navig:usb_cam:zbar_opencv
+-DCATKIN_WHITELIST_PACKAGES=quad_navig -DCATKIN_DEVEL_PREFIX=/home/aaron/JA/code/LearningROS/opencv_learning/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/JA/code/LearningROS/opencv_learning/install -G Unix Makefiles

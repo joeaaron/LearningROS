@@ -1,0 +1,8 @@
+prefix=/home/aaron/JA/code/LearningROS/opencv_learning/install
+
+Name: qr_navigation
+Description: Description of qr_navigation
+Version: 0.0.0
+Cflags: -I/home/aaron/JA/code/LearningROS/opencv_learning/install/include
+Libs: -L/home/aaron/JA/code/LearningROS/opencv_learning/install/lib -lqr_navig
+Requires: message_runtime

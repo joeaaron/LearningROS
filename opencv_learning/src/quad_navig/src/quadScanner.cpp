@@ -2,7 +2,7 @@
  @Author: JoeAaron
  @Email: pant333@163.com
  @Created Time : 2018-09-04 06:25:13PM
- @Last Modified : 2018-09-04 06:25:13PM
+ @Last Modified : 2018-09-05 03:00:13PM
  @File Name: quadScanner.cpp
  @Description:
  ************************************************************************/
@@ -11,6 +11,9 @@
 
 #define CAMERAMAT "CameraMat"
 #define DISTCOEFF "DistCoeff"
+
+const int MAX_QUADLENGTH = 2000;
+const int MIN_QUADLENGTH = 200;
 
 QuadScanner::QuadScanner(ros::NodeHandle nh, const string& calibFile)
 	: it(nh)
@@ -148,7 +151,7 @@ void CalcDstSize(const vector<cv::Point2f>& corners, int& h1, int& h2, int& w1, 
     w2 = sqrt((corners[2].x - corners[3].x)*(corners[2].x - corners[3].x) + (corners[2].y - corners[3].y)*(corners[2].y - corners[3].y));
 }
 
-float GetAngelOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
+float GetAngleOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
 {
     float theta = atan2(pt1.x - c.x, pt1.y - c.y) - atan2(pt2.x - c.x, pt2.y - c.y);
     if (theta > CV_PI)
@@ -252,10 +255,10 @@ void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<P
 		int h1 = 0; int h2 = 0; int w1 = 0; int w2 = 0;
 		CalcDstSize(crossPoints, h1, h2, w1, w2);
 
-		if(h1 > 200 && h1 < 2000 &&
-		   h2 > 200 && h2 < 2000 &&
-		   w1 > 200 && w1 < 2000 &&
-		   w2 > 200 && w2 < 2000)
+		if(h1 > MIN_QUADLENGTH && h1 < MAX_QUADLENGTH &&
+		   h2 > MIN_QUADLENGTH && h2 < MAX_QUADLENGTH &&
+		   w1 > MIN_QUADLENGTH && w1 < MAX_QUADLENGTH &&
+		   w2 > MIN_QUADLENGTH && w2 < MAX_QUADLENGTH)
 		{
 			for(int i = 0; i < 4; i++)
 				circle(img, crossPoints[i], 10, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
@@ -345,9 +348,9 @@ void QuadScanner::GetQuadCamTf(Mat img, vector<Point2f> crossPoints)
 	Point2f pt2(img.cols/2, img.rows/2);
 	Point2f pt3(cross_x, cross_y - 200);
 
-	float a1 = GetAngelOfTwoVector(pt1, pt2, pt0);
+	float a1 = GetAngleOfTwoVector(pt1, pt2, pt0);
 	float a2 = CV_PI - a1;
-	float a3 = GetAngelOfTwoVector(pt1, pt3, pt0);
+	float a3 = GetAngleOfTwoVector(pt1, pt3, pt0);
 
 	double x = L * cos(a2);
 	double y = L * sin(a2);

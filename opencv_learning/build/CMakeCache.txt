@@ -29,11 +29,8 @@ CATKIN_ENABLE_TESTING:BOOL=ON
 //Catkin skip testing
 CATKIN_SKIP_TESTING:BOOL=OFF
 
-//No help, variable specified on the command line.
-CATKIN_WHITELIST_ELIST_PACKAGES:UNINITIALIZED=
-
 //List of ';' separated packages to build
-CATKIN_WHITELIST_PACKAGES:STRING=
+CATKIN_WHITELIST_PACKAGES:STRING=quad_navig
 
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
@@ -195,9 +192,6 @@ EMPY_EXECUTABLE:FILEPATH=/usr/bin/empy
 //Empy script
 EMPY_SCRIPT:STRING=/usr/bin/empy
 
-//The directory containing a CMake configuration file for Eigen3.
-Eigen3_DIR:PATH=/usr/lib/cmake/eigen3
-
 //The directory containing a CMake configuration file for GMock.
 GMock_DIR:PATH=GMock_DIR-NOTFOUND
 
@@ -256,10 +250,10 @@ UBUNTU:BOOL=TRUE
 UBUNTU_XENIAL:BOOL=TRUE
 
 //Path to a file.
-ZBAR_INCLUDE_DIR:PATH=/usr/local/include/zbar
+ZBAR_INCLUDE_DIR:PATH=/usr/include/zbar
 
 //Path to a library.
-ZBAR_LIBRARIES:FILEPATH=/usr/local/lib/libzbar.so
+ZBAR_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libzbar.a
 
 //Path to a file.
 _gmock_INCLUDES:FILEPATH=/usr/include/gmock/gmock.h
@@ -279,12 +273,6 @@ actionlib_DIR:PATH=/opt/ros/kinetic/share/actionlib/cmake
 //The directory containing a CMake configuration file for actionlib_msgs.
 actionlib_msgs_DIR:PATH=/opt/ros/kinetic/share/actionlib_msgs/cmake
 
-//Value Computed by CMake
-agv_qr_BINARY_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/build/agv_qr
-
-//Value Computed by CMake
-agv_qr_SOURCE_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/src/agv_qr
-
 //The directory containing a CMake configuration file for camera_calibration_parsers.
 camera_calibration_parsers_DIR:PATH=/opt/ros/kinetic/share/camera_calibration_parsers/cmake
 
@@ -302,9 +290,6 @@ cpp_common_DIR:PATH=/opt/ros/kinetic/share/cpp_common/cmake
 
 //The directory containing a CMake configuration file for cv_bridge.
 cv_bridge_DIR:PATH=/opt/ros/kinetic/share/cv_bridge/cmake
-
-//The directory containing a CMake configuration file for dynamic_reconfigure.
-dynamic_reconfigure_DIR:PATH=/opt/ros/kinetic/share/dynamic_reconfigure/cmake
 
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/kinetic/share/gencpp/cmake
@@ -371,13 +356,7 @@ gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 image_transport_DIR:PATH=/opt/ros/kinetic/share/image_transport/cmake
 
 //Path to a library.
-lib:FILEPATH=/opt/ros/kinetic/lib/librospack.so
-
-//Value Computed by CMake
-lighthouse_navigation_BINARY_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/build/magnetic
-
-//Value Computed by CMake
-lighthouse_navigation_SOURCE_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/src/magnetic
+lib:FILEPATH=/opt/ros/kinetic/lib/libtf2.so
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/kinetic/share/message_filters/cmake
@@ -390,6 +369,18 @@ message_runtime_DIR:PATH=/opt/ros/kinetic/share/message_runtime/cmake
 
 //The directory containing a CMake configuration file for pluginlib.
 pluginlib_DIR:PATH=/opt/ros/kinetic/share/pluginlib/cmake
+
+//Value Computed by CMake
+qr_navigation_BINARY_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/build/qr_navigation
+
+//Value Computed by CMake
+qr_navigation_SOURCE_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/src/qr_navigation
+
+//Value Computed by CMake
+quad_navig_BINARY_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/build/quad_navig
+
+//Value Computed by CMake
+quad_navig_SOURCE_DIR:STATIC=/home/aaron/JA/code/LearningROS/opencv_learning/src/quad_navig
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/kinetic/share/rosconsole/cmake
@@ -565,7 +556,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -613,7 +604,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v2.7.12()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding ZBAR
-FIND_PACKAGE_MESSAGE_DETAILS_ZBAR:INTERNAL=[/usr/local/lib/libzbar.so][/usr/local/include/zbar][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_ZBAR:INTERNAL=[/usr/lib/x86_64-linux-gnu/libzbar.a][/usr/include/zbar][v()]
 GMOCK_FROM_SOURCE_FOUND:INTERNAL=TRUE
 GMOCK_FROM_SOURCE_INCLUDE_DIRS:INTERNAL=/usr/include
 GMOCK_FROM_SOURCE_LIBRARIES:INTERNAL=gmock
@@ -634,31 +625,31 @@ GTEST_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 GTEST_MAIN_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GTEST_MAIN_LIBRARY_DEBUG
 GTEST_MAIN_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-PC_ZBAR_CFLAGS:INTERNAL=-I/usr/local/include
+PC_ZBAR_CFLAGS:INTERNAL=
 PC_ZBAR_CFLAGS_I:INTERNAL=
 PC_ZBAR_CFLAGS_OTHER:INTERNAL=
 PC_ZBAR_FOUND:INTERNAL=1
-PC_ZBAR_INCLUDEDIR:INTERNAL=/usr/local/include
-PC_ZBAR_INCLUDE_DIRS:INTERNAL=/usr/local/include
-PC_ZBAR_LDFLAGS:INTERNAL=-L/usr/local/lib;-lzbar
+PC_ZBAR_INCLUDEDIR:INTERNAL=/usr/include
+PC_ZBAR_INCLUDE_DIRS:INTERNAL=
+PC_ZBAR_LDFLAGS:INTERNAL=-lzbar
 PC_ZBAR_LDFLAGS_OTHER:INTERNAL=
-PC_ZBAR_LIBDIR:INTERNAL=/usr/local/lib
+PC_ZBAR_LIBDIR:INTERNAL=/usr/lib
 PC_ZBAR_LIBRARIES:INTERNAL=zbar
-PC_ZBAR_LIBRARY_DIRS:INTERNAL=/usr/local/lib
+PC_ZBAR_LIBRARY_DIRS:INTERNAL=
 PC_ZBAR_LIBS:INTERNAL=
 PC_ZBAR_LIBS_L:INTERNAL=
 PC_ZBAR_LIBS_OTHER:INTERNAL=
 PC_ZBAR_LIBS_PATHS:INTERNAL=
-PC_ZBAR_PREFIX:INTERNAL=/usr/local
-PC_ZBAR_STATIC_CFLAGS:INTERNAL=-I/usr/local/include
+PC_ZBAR_PREFIX:INTERNAL=/usr
+PC_ZBAR_STATIC_CFLAGS:INTERNAL=
 PC_ZBAR_STATIC_CFLAGS_I:INTERNAL=
 PC_ZBAR_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_ZBAR_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/include
-PC_ZBAR_STATIC_LDFLAGS:INTERNAL=-L/usr/local/lib;-lzbar
+PC_ZBAR_STATIC_INCLUDE_DIRS:INTERNAL=
+PC_ZBAR_STATIC_LDFLAGS:INTERNAL=-lzbar
 PC_ZBAR_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_ZBAR_STATIC_LIBDIR:INTERNAL=
 PC_ZBAR_STATIC_LIBRARIES:INTERNAL=zbar
-PC_ZBAR_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/lib
+PC_ZBAR_STATIC_LIBRARY_DIRS:INTERNAL=
 PC_ZBAR_STATIC_LIBS:INTERNAL=
 PC_ZBAR_STATIC_LIBS_L:INTERNAL=
 PC_ZBAR_STATIC_LIBS_OTHER:INTERNAL=
@@ -713,7 +704,7 @@ avcodec_libavcodec_INCLUDEDIR:INTERNAL=
 avcodec_libavcodec_LIBDIR:INTERNAL=
 avcodec_libavcodec_PREFIX:INTERNAL=
 avcodec_libavcodec_VERSION:INTERNAL=
-prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
+prefix_result:INTERNAL=/usr/lib
 swscale_CFLAGS:INTERNAL=-I/usr/include/x86_64-linux-gnu
 swscale_CFLAGS_I:INTERNAL=
 swscale_CFLAGS_OTHER:INTERNAL=
