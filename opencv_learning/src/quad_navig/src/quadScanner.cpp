@@ -16,12 +16,12 @@ const int MAX_QUADLENGTH = 2000;
 const int MIN_QUADLENGTH = 200;
 
 QuadScanner::QuadScanner(ros::NodeHandle nh, const string& calibFile)
-	: it(nh)
+  : it(nh)
 {
 	ReadCalibPara(calibFile.c_str());
 
 	image_sub=it.subscribe("/usb_cam/image_raw",1,&QuadScanner::imageCb,this);
-    image_pub=it.advertise("quad_navig",1);
+	image_pub=it.advertise("quad_navig",1);
 }
 
 int QuadScanner::ReadCalibPara(string filename)
