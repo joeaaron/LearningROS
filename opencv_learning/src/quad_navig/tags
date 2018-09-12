@@ -1,0 +1,36 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AGV_QUADNAVIG_QUADSCANNER_H__	include/quad_navig/quadScanner.h	2;"	d
+CAMERAMAT	src/quadScanner.cpp	12;"	d	file:
+CalcDstSize	src/quadScanner.cpp	/^void CalcDstSize(const vector<cv::Point2f>& corners, int& h1, int& h2, int& w1, int& w2)$/;"	f
+DISTCOEFF	src/quadScanner.cpp	13;"	d	file:
+DrawArrow	src/quadScanner.cpp	/^void QuadScanner::DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,$/;"	f	class:QuadScanner
+FindCandidate	src/quadScanner.cpp	/^void QuadScanner::FindCandidate(Mat img, Mat& drawing)$/;"	f	class:QuadScanner
+GetAngleOfTwoVector	src/quadScanner.cpp	/^float GetAngleOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)$/;"	f
+GetCrossPoint	src/quadScanner.cpp	/^inline Point2f GetCrossPoint(Vec4i lineA, Vec4i lineB)$/;"	f
+GetQuadCamTf	src/quadScanner.cpp	/^void QuadScanner::GetQuadCamTf(Mat img, vector<Point2f> crossPoints)$/;"	f	class:QuadScanner
+GetTfTrans	src/quadScanner.cpp	/^void QuadScanner::GetTfTrans(double x,double y, double theta)$/;"	f	class:QuadScanner
+IsQuad	src/quadScanner.cpp	/^void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints)$/;"	f	class:QuadScanner
+LineDetection	src/quadScanner.cpp	/^void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines)$/;"	f	class:QuadScanner
+MAX_QUADLENGTH	src/quadScanner.cpp	/^const int MAX_QUADLENGTH = 2000;$/;"	v
+MIN_QUADLENGTH	src/quadScanner.cpp	/^const int MIN_QUADLENGTH = 200;$/;"	v
+QuadDetect	src/quadScanner.cpp	/^void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)$/;"	f	class:QuadScanner
+QuadScanner	include/quad_navig/quadScanner.h	/^class QuadScanner$/;"	c
+QuadScanner	src/quadScanner.cpp	/^QuadScanner::QuadScanner(ros::NodeHandle nh, const string& calibFile)$/;"	f	class:QuadScanner
+ReadCalibPara	src/quadScanner.cpp	/^int QuadScanner::ReadCalibPara(string filename)$/;"	f	class:QuadScanner
+boundingRectangleContour	src/quadScanner.cpp	/^std::vector<Point2i> boundingRectangleContour(Vec4i line, float d){$/;"	f
+extendedBoundingRectangleLineEquivalence	src/quadScanner.cpp	/^bool extendedBoundingRectangleLineEquivalence(const Vec4i& _l1, const Vec4i& _l2, float extensionLengthFraction, float maxAngleDiff, float boundingRectangleThickness){$/;"	f
+extendedLine	src/quadScanner.cpp	/^Vec4i extendedLine(Vec4i line, double d){$/;"	f
+imageCb	src/quadScanner.cpp	/^void QuadScanner::imageCb(const sensor_msgs::ImageConstPtr& msg)$/;"	f	class:QuadScanner
+image_pub	include/quad_navig/quadScanner.h	/^    image_transport::Publisher image_pub;$/;"	m	class:QuadScanner
+image_sub	include/quad_navig/quadScanner.h	/^    image_transport::Subscriber image_sub;$/;"	m	class:QuadScanner
+it	include/quad_navig/quadScanner.h	/^    image_transport::ImageTransport it;$/;"	m	class:QuadScanner
+linearParameters	src/quadScanner.cpp	/^Vec2d linearParameters(Vec4i line){$/;"	f
+main	src/quad_navig.cpp	/^int main(int argc, char **argv)$/;"	f
+unit_x	include/quad_navig/quadScanner.h	/^   	double unit_x;$/;"	m	class:QuadScanner
+unit_y	include/quad_navig/quadScanner.h	/^    double unit_y;$/;"	m	class:QuadScanner
+~QuadScanner	include/quad_navig/quadScanner.h	/^    ~QuadScanner(){}$/;"	f	class:QuadScanner
