@@ -6,7 +6,6 @@
   @File Name: quadScanner.cpp
   @Description:
  ************************************************************************/
-
 #include "quad_navig/quadScanner.h"
 
 #define CAMERAMAT "CameraMat"
@@ -267,28 +266,54 @@ void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<P
 
 		if(crossPoints.size() != 4)
 			flag = false;
-
-		bool isGoodPoints = true;
-		for(int i = 0;i < crossPoints.size(); i++)
+        else
 		{
-			for(int j = i+ 1; j < crossPoints.size(); j++)
+			Point2f center(0, 0);
+			//topLeft, topRight, bottomLeft, bottomRight
+			sort(crossPoints.begin(), crossPoints.end(), comp);
+			// Get mass center
+			for (int i = 0; i < crossPoints.size(); i++)
+				center += crossPoints[i];
+			center *= (1. / crossPoints.size());
+
+			std::vector<cv::Point2f> top, bot;
+			for (int i = 0; i < crossPoints.size(); i++)
 			{
-				int distance = sqrt((crossPoints[i].x - crossPoints[j].x)*(crossPoints[i].x - crossPoints[j].x) + (crossPoints[i].y - crossPoints[j].y)*(crossPoints[i].y - crossPoints[j].y));
-				if(distance < MIN_QUADLENGTH && distance < MAX_QUADLENGTH)
-					isGoodPoints = false;
+				if (crossPoints[i].y < center.y && top.size() < 2)    //这里的小于2是为了避免三个顶点都在top的情况
+					top.push_back(crossPoints[i]);
+				else
+					bot.push_back(crossPoints[i]);
 			}
-		}
 
-		if(!isGoodPoints) flag = false;
-		else{
-			for(int i = -1; i < 4; i++)
-				circle(img, crossPoints[i], 9, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
+			if (top.size() == 2 && bot.size() == 2)
+			{
+				bool isGoodPoints = true;
 
-			flag = true;
+				for(int i = 0;i < crossPoints.size(); i++)
+				{
+					for(int j = i+ 1; j < crossPoints.size(); j++)
+					{
+						int distance = sqrt((crossPoints[i].x - crossPoints[j].x)*(crossPoints[i].x - crossPoints[j].x) + (crossPoints[i].y - crossPoints[j].y)*(crossPoints[i].y - crossPoints[j].y));
+						if(distance < MIN_QUADLENGTH || distance < MAX_QUADLENGTH)
+							isGoodPoints = false;
+					}
+				}
 
-			imshow("Result", img);
-			waitKey(1);
+				if(!isGoodPoints) flag = false;
+				else{
+					for(int i = -1; i < 4; i++)
+						circle(img, crossPoints[i], 9, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
 
+					flag = true;
+
+					imshow("Result", img);
+					waitKey(1);
+
+				}
+
+			}
+            else
+				flag = false;
 		}
 	}
 
@@ -340,45 +365,50 @@ void QuadScanner::GetQuadCamTf(Mat img, vector<Point2f> crossPoints)
 	vector<double> coordinates_y;
 	for(int i = 0; i < crossPoints.size(); i++)
 	{
-		coordinates_x[i] = crossPoints[i].x;
-		coordinates_y[i] = crossPoints[i].y;
+		coordinates_x.push_back(crossPoints[i].x);
+		coordinates_y.push_back(crossPoints[i].y);
 	}
 
 	//两条对角线的系数和偏移
-	double k1 = (coordinates_y[2] - coordinates_y[0]) / (coordinates_x[2] - coordinates_x[0]);
-	double b1 = (coordinates_x[2] * coordinates_y[0] - coordinates_x[0] * coordinates_y[2]) / (coordinates_x[2] - coordinates_x[0]);
-	double k2 = (coordinates_y[3] - coordinates_y[1]) / (coordinates_x[3] - coordinates_x[1]);
-	double b2 = (coordinates_x[3] * coordinates_y[1] - coordinates_x[1] * coordinates_y[3]) / (coordinates_x[3] - coordinates_x[1]);
+	double k1 = (coordinates_y[3] - coordinates_y[0]) / (coordinates_x[3] - coordinates_x[0]);
+	double b1 = (coordinates_x[3] * coordinates_y[0] - coordinates_x[0] * coordinates_y[3]) / (coordinates_x[3] - coordinates_x[0]);
+	double k2 = (coordinates_y[2] - coordinates_y[1]) / (coordinates_x[2] - coordinates_x[1]);
+	double b2 = (coordinates_x[2] * coordinates_y[1] - coordinates_x[1] * coordinates_y[2]) / (coordinates_x[2] - coordinates_x[1]);
 
-	//两条对角线交点的X坐标
+	//两条对角线交点的坐标
 	double cross_x = -(b1-b2)/(k1-k2);
 	double cross_y = (k1*b2 - k2 *b1)/(k1-k2);
 
 	double center_x = (coordinates_x[0] + coordinates_x[3]) / 2;
 	double center_y = (coordinates_y[0] + coordinates_y[3]) / 2;
 
-	//quad coordinate
-	Scalar lineColor = Scalar(0, 0, 255);
-	DrawArrow(img, Point(cross_x, cross_y), Point(center_x, center_y), 25, 30, lineColor, 2, CV_AA);
-	DrawArrow(img, Point(cross_x, cross_y), Point(cross_x, cross_y- 200), 25, 30, lineColor, 2, CV_AA);
-	//L
-	lineColor = Scalar(255, 0, 0);
-	DrawArrow(img, Point(cross_x, cross_y), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA);
-	double L = sqrt(pow(cross_x - img.cols/2, 2) + pow(cross_y - img.rows/2, 2));
+	if(cross_x >= 0 && cross_y >= 0 && cross_x <= img.cols && cross_y <= img.rows)
+	{
+		//quad coordinate
+		Scalar lineColor = Scalar(0, 0, 255);
+		DrawArrow(img, Point(cross_x, cross_y), Point(center_x, center_y), 25, 30, lineColor, 2, CV_AA);
+		DrawArrow(img, Point(cross_x, cross_y), Point(cross_x, cross_y- 200), 25, 30, lineColor, 2, CV_AA);
+		//L
+		lineColor = Scalar(255, 0, 0);
+		DrawArrow(img, Point(cross_x, cross_y), Point(img.cols/2, img.rows/2), 25, 30, lineColor, 2, CV_AA);
+		double L = sqrt(pow(cross_x - img.cols/2, 2) + pow(cross_y - img.rows/2, 2));
 
-	Point2f pt0(cross_x, cross_y);
-	Point2f pt1(center_x, center_y);
-	Point2f pt2(img.cols/2, img.rows/2);
-	Point2f pt3(cross_x, cross_y - 200);
+		Point2f pt0(cross_x, cross_y);
+		Point2f pt1(center_x, center_y);
+		Point2f pt2(img.cols/2, img.rows/2);
+		Point2f pt3(cross_x, cross_y - 200);
 
-	float a1 = GetAngleOfTwoVector(pt1, pt2, pt0);
-	float a2 = CV_PI - a1;
-	float a3 = GetAngleOfTwoVector(pt1, pt3, pt0);
+		float a1 = GetAngleOfTwoVector(pt1, pt2, pt0);
+		float a2 = CV_PI - a1;
+		float a3 = GetAngleOfTwoVector(pt1, pt3, pt0);
 
-	double x = L * cos(a2);
-	double y = L * sin(a2);
+		double x = L * cos(a2);
+		double y = L * sin(a2);
 
-	GetTfTrans(x, y, a3);
+		GetTfTrans(x, y, a3);
+	}
+	else
+		cout << "The Goal finded is not we need, please try again!";
 }
 
 /**
@@ -416,8 +446,6 @@ void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)
 
 	if(bQuad)
 	{
-		//topLeft, topRight, bottomLeft, bottomRight
-		sort(crossPoints.begin(), crossPoints.end(), comp);
 		//pub tf
 		GetQuadCamTf(img, crossPoints);
 	}
