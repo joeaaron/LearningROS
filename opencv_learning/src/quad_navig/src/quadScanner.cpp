@@ -22,6 +22,10 @@ struct str{
 	}
 }comp;
 
+struct sortY{
+	bool operator()(cv::Point pt1, cv::Point pt2){return(pt1.y < pt2.y);}
+}mySortY;
+
 QuadScanner::QuadScanner(ros::NodeHandle nh, const string& calibFile)
 	: it(nh)
 {
@@ -270,13 +274,18 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 		cvtColor(img_proc, img_proc, CV_BGR2GRAY);
 		goodFeaturesToTrack(img_proc, crossPoints, 4, 0.3, 10, Mat(), 3);
 		*/
-		if(crossPoints.size() != 4)
+		if(crossPoints.size() < 4)
 			flag = false;
         else
 		{
+			//if one crosspoint of left line and right line is within the image, it should be erased.
+			if (crossPoints.size() > 4)
+			{
+				sort(crossPoints.begin(), crossPoints.end(), mySortY);
+				crossPoints.erase(crossPoints.begin());
+			}
 			Point2f center(0, 0);
-			//topLeft, topRight, bottomLeft, bottomRight
-			sort(crossPoints.begin(), crossPoints.end(), comp);
+			
 			// Get mass center
 			for (int i = 0; i < crossPoints.size(); i++)
 				center += crossPoints[i];
@@ -307,7 +316,9 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 
 				if(!isGoodPoints) flag = false;
 				else{
-					for(int i = -1; i < 4; i++)
+					//topLeft, topRight, bottomLeft, bottomRight
+					sort(crossPoints.begin(), crossPoints.end(), comp);
+					for(int i = 0; i < 4; i++)
 						circle(img, crossPoints[i], 9, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
 
 					flag = true;
@@ -324,6 +335,7 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 	}
 
 }
+
 
 void QuadScanner::DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
 		cv::Scalar& color, int thickness, int lineType)
