@@ -13,6 +13,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 
 using namespace cv;
 using namespace std;
@@ -27,8 +28,8 @@ public:
 private:
 	void QuadDetect(cv_bridge::CvImagePtr cv_ptr);
 	void FindCandidate(Mat img, Mat& drawing);
-	void LineDetection(Mat img, std::vector<Vec4i>& reducedLines);
-	void IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints);
+	void LineDetection(Mat img, std::vector<Vec4i>& reducedLines, Mat& reducedLinesImg);
+	void IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints);
     void GetQuadCamTf(Mat img, vector<Point2f> crossPoints);
 	void DrawArrow(cv::Mat& img, cv::Point pStart, cv::Point pEnd, int len, int alpha,
      cv::Scalar& color, int thickness, int lineType);

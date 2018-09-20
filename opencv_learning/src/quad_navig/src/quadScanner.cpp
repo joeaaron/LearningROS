@@ -12,7 +12,7 @@
 #define DISTCOEFF "DistCoeff"
 
 const int MAX_QUADLENGTH = 2000;
-const int MIN_QUADLENGTH = 200;
+const int MIN_QUADLENGTH = 50;
 
 struct str{
 	bool operator()(Point2f a, Point2f b){
@@ -188,10 +188,10 @@ void QuadScanner::FindCandidate(Mat img, Mat& drawing)
 	drawContours(drawing, polyContours, maxArea, Scalar(0, 0, 255), 2);
 }
 
-void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines)
+void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines, Mat& reducedLinesImg)
 {
 	Mat detectedLinesImg = Mat::zeros(img.rows, img.cols, CV_8UC3);
-	Mat reducedLinesImg = detectedLinesImg.clone();
+    reducedLinesImg = detectedLinesImg.clone();
 
 	Ptr<LineSegmentDetector> detector = createLineSegmentDetector(LSD_REFINE_NONE);
 	std::vector<Vec4i> lines; detector->detect(img, lines);
@@ -247,13 +247,16 @@ void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines)
 	for(Vec4i reduced: reducedLines){
 		line(reducedLinesImg, Point(reduced[0], reduced[1]), Point(reduced[2], reduced[3]), Scalar(255, 255, 255), 2);
 	}
+	imshow("Goal", reducedLinesImg);
+	waitKey(1);
 }
 
-void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints)
+void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints)
 {
 	if(lines.size() != 4)
 		flag = false;
 	else{
+	
 		for(int i = 0;i < lines.size(); i++)
 		{
 			for(int j = i+ 1; j < lines.size(); j++)
@@ -263,7 +266,10 @@ void QuadScanner::IsQuad(Mat img, std::vector<Vec4i> lines, bool& flag, vector<P
 					crossPoints.push_back(pt);
 			}
 		}
-
+		/*
+		cvtColor(img_proc, img_proc, CV_BGR2GRAY);
+		goodFeaturesToTrack(img_proc, crossPoints, 4, 0.3, 10, Mat(), 3);
+		*/
 		if(crossPoints.size() != 4)
 			flag = false;
         else
@@ -419,7 +425,7 @@ void QuadScanner::GetQuadCamTf(Mat img, vector<Point2f> crossPoints)
  **/
 void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)
 {
-	Mat frame, img, bgr, hsv;
+	Mat frame, img, bgr, hsv, reducedLinesImg;
 	frame = cv_ptr->image;
 	img = frame.clone();
 	//Image Preprocess
@@ -438,11 +444,11 @@ void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)
 
 	cvtColor(drawing, drawing, CV_BGR2GRAY);
 	std::vector<Vec4i> reducedLines;
-	LineDetection(drawing, reducedLines);
+	LineDetection(drawing, reducedLines, reducedLinesImg);
 
 	bool bQuad = false;
 	vector<Point2f> crossPoints;
-	IsQuad(img, reducedLines, bQuad, crossPoints);
+	IsQuad(img, reducedLinesImg, reducedLines, bQuad, crossPoints);
 
 	if(bQuad)
 	{
