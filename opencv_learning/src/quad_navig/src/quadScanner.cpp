@@ -174,6 +174,13 @@ float GetAngleOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
 	return theta;
 }
 
+/**
+ * @brief: Find the contours of the quadrangle
+ * @function FindCandidate
+ * @param[in] img
+ * @param[out] drawing
+ * @return none
+ **/
 void QuadScanner::FindCandidate(Mat img, Mat& drawing)
 {
 	vector<vector<Point> > contours;
@@ -192,6 +199,14 @@ void QuadScanner::FindCandidate(Mat img, Mat& drawing)
 	drawContours(drawing, polyContours, maxArea, Scalar(0, 0, 255), 2);
 }
 
+/**
+ * @brief: Detect the lines that surrounding the quadrangle
+ * @function LineDetection
+ * @param[in] img
+ * @param[out] reducedLines
+ * @param[out] reducedLinesImg
+ * @return none
+ **/
 void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines, Mat& reducedLinesImg)
 {
 	Mat detectedLinesImg = Mat::zeros(img.rows, img.cols, CV_8UC3);
@@ -255,6 +270,16 @@ void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines, Mat& 
 	waitKey(1);
 }
 
+/**
+ * @brief: Judge if the quadrangle detected is needed.
+ * @function IsQuad
+ * @param[in] img
+ * @param[in] img_proc
+ * @param[out] lines
+ * @param[out] flag
+ * @param[out] crossPoints
+ * @return none
+ **/
 void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& flag, vector<Point2f>& crossPoints)
 {
 	if(lines.size() != 4)
@@ -309,6 +334,7 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 					for(int j = i+ 1; j < crossPoints.size(); j++)
 					{
 						int distance = sqrt((crossPoints[i].x - crossPoints[j].x)*(crossPoints[i].x - crossPoints[j].x) + (crossPoints[i].y - crossPoints[j].y)*(crossPoints[i].y - crossPoints[j].y));
+						cout <<"distance = " << distance << endl;
 						if(distance < MIN_QUADLENGTH || distance < MAX_QUADLENGTH)
 							isGoodPoints = false;
 					}
