@@ -13,6 +13,7 @@
 
 const int MAX_QUADLENGTH = 2000;
 const int MIN_QUADLENGTH = 50;
+const float ADAPTIVEVALUE = 0.2;
 
 struct str{
 	bool operator()(Point2f a, Point2f b){
@@ -155,8 +156,8 @@ inline Point2f GetCrossPoint(Vec4i lineA, Vec4i lineB)
 
 void CalcDstSize(const vector<cv::Point2f>& corners, int& h1, int& h2, int& w1, int& w2)
 {
-	h1 = sqrt((corners[0].x - corners[3].x)*(corners[0].x - corners[3].x) + (corners[0].y - corners[3].y)*(corners[0].y - corners[3].y));
-	h2 = sqrt((corners[1].x - corners[2].x)*(corners[1].x - corners[2].x) + (corners[1].y - corners[2].y)*(corners[1].y - corners[2].y));
+	h1 = sqrt((corners[0].x - corners[2].x)*(corners[0].x - corners[2].x) + (corners[0].y - corners[2].y)*(corners[0].y - corners[2].y));
+	h2 = sqrt((corners[1].x - corners[3].x)*(corners[1].x - corners[3].x) + (corners[1].y - corners[3].y)*(corners[1].y - corners[3].y));
 
 	w1 = sqrt((corners[0].x - corners[1].x)*(corners[0].x - corners[1].x) + (corners[0].y - corners[1].y)*(corners[0].y - corners[1].y));
 	w2 = sqrt((corners[2].x - corners[3].x)*(corners[2].x - corners[3].x) + (corners[2].y - corners[3].y)*(corners[2].y - corners[3].y));
@@ -175,7 +176,7 @@ float GetAngleOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
 }
 
 /**
- * @brief: Find the contours of the quadrangle
+ * @brief: Find the contours of the quadrangle, only the internal contours
  * @function FindCandidate
  * @param[in] img
  * @param[out] drawing
@@ -183,20 +184,43 @@ float GetAngleOfTwoVector(Point2f &pt1, Point2f &pt2, Point2f &c)
  **/
 void QuadScanner::FindCandidate(Mat img, Mat& drawing)
 {
-	vector<vector<Point> > contours;
-	vector<Vec4i> hierarchy;
+	vector<vector<Point> > contours, _contours;
+	vector<Vec4i> hierarchy, _hierarchy;
 
 	findContours(img, contours, hierarchy, CV_RETR_EXTERNAL, CHAIN_APPROX_NONE, Point(0,0));
-	vector<vector<Point> > polyContours(contours.size());
-	int maxArea = 0;
-	for(int index = 0; index < contours.size(); index++)
-	{
-		if(contourArea(contours[index]) > contourArea(contours[maxArea]))
-			maxArea = index;
-		approxPolyDP(contours[index], polyContours[index],10, true);
-	}
+	findContours(img, _contours, _hierarchy, CV_RETR_TREE, CHAIN_APPROX_NONE, Point(0,0));
 
-	drawContours(drawing, polyContours, maxArea, Scalar(0, 0, 255), 2);
+	if(contours.size() == _contours.size())
+		cout << "Do not find the goal." << endl;
+	else
+	{
+		for (int i = 0; i < contours.size(); ++i)
+		{
+			int contour_size = contours[i].size();
+			for (int j = 0; j < _contours.size(); ++j)
+			{
+				int _contour_size = _contours[j].size();
+				if(contour_size == _contour_size)
+				{
+					swap(_contours[j], _contours[_contours.size() - 1]);
+					_contours.pop_back();
+					break;
+				}
+			}
+		}
+
+		vector<vector<Point> > polyContours(_contours.size());
+		int maxArea = 0;
+		for(int index = 0; index < _contours.size(); index++)
+		{
+			if(contourArea(_contours[index]) > contourArea(_contours[maxArea]))
+				maxArea = index;
+			approxPolyDP(_contours[index], polyContours[index],10, true);
+		}
+
+		drawContours(drawing, polyContours, maxArea, Scalar(0, 0, 255), 2);
+	}
+	
 }
 
 /**
@@ -222,52 +246,60 @@ void QuadScanner::LineDetection(Mat img, std::vector<Vec4i>& reducedLines, Mat& 
 					+ (line[3] - line[1]) * (line[3] - line[1]));
 			return length > 30;
 			});
-	//partion via our partioning function
-	std::vector<int> labels;
-	int equilavenceClassesCount = cv::partition(linesWithoutSmall, labels, [](const Vec4i l1, const Vec4i l2){
-			return extendedBoundingRectangleLineEquivalence(
-					l1, l2,
-					// line extension length - as fraction of original line width
-					0.2,
-					// maximum allowed angle difference for lines to be considered in same equivalence class
-					2.0,
-					// thickness of bounding rectangle around each line
-					10);
-			});
 
-	// build point clouds out of each equivalence classes
-	std::vector<std::vector<Point2i>> pointClouds(equilavenceClassesCount);
-	for (int i = 0; i < linesWithoutSmall.size(); i++){
-		Vec4i& detectedLine = linesWithoutSmall[i];
-		pointClouds[labels[i]].push_back(Point2i(detectedLine[0], detectedLine[1]));
-		pointClouds[labels[i]].push_back(Point2i(detectedLine[2], detectedLine[3]));
+	if(linesWithoutSmall.size() < 1)
+		cout << "no lines merge!" << endl;
+	else
+	{
+		//partion via our partioning function
+		std::vector<int> labels;
+		int equilavenceClassesCount = cv::partition(linesWithoutSmall, labels, [](const Vec4i l1, const Vec4i l2){
+				return extendedBoundingRectangleLineEquivalence(
+						l1, l2,
+						// line extension length - as fraction of original line width
+						0.2,
+						// maximum allowed angle difference for lines to be considered in same equivalence class
+						2.0,
+						// thickness of bounding rectangle around each line
+						10);
+				});
+
+		// build point clouds out of each equivalence classes
+		std::vector<std::vector<Point2i>> pointClouds(equilavenceClassesCount);
+		for (int i = 0; i < linesWithoutSmall.size(); i++){
+			Vec4i& detectedLine = linesWithoutSmall[i];
+			pointClouds[labels[i]].push_back(Point2i(detectedLine[0], detectedLine[1]));
+			pointClouds[labels[i]].push_back(Point2i(detectedLine[2], detectedLine[3]));
+		}
+
+		// fit line to each equivalence class point cloud
+		reducedLines = std::accumulate(pointClouds.begin(), pointClouds.end(), std::vector<Vec4i>{}, [](std::vector<Vec4i> target, const std::vector<Point2i>& _pointCloud){
+				std::vector<Point2i> pointCloud = _pointCloud;
+
+				//lineParams: [vx,vy, x0,y0]: (normalized vector, point on our contour)
+				// (x,y) = (x0,y0) + t*(vx,vy), t -> (-inf; inf)
+				Vec4f lineParams; fitLine(pointCloud, lineParams, CV_DIST_L2, 0, 0.01, 0.01);
+
+				// derive the bounding xs of point cloud
+				decltype(pointCloud)::iterator minXP, maxXP;
+				std::tie(minXP, maxXP) = std::minmax_element(pointCloud.begin(), pointCloud.end(), [](const Point2i& p1, const Point2i& p2){ return p1.x < p2.x; });
+
+				// derive y coords of fitted line
+				float m = lineParams[1] / lineParams[0];
+				int y1 = ((minXP->x - lineParams[2]) * m) + lineParams[3];
+				int y2 = ((maxXP->x - lineParams[2]) * m) + lineParams[3];
+
+				target.push_back(Vec4i(minXP->x, y1, maxXP->x, y2));
+				return target;
+				});
+
+		for(Vec4i reduced: reducedLines){
+			line(reducedLinesImg, Point(reduced[0], reduced[1]), Point(reduced[2], reduced[3]), Scalar(255, 255, 255), 2);
+		}
+		imshow("Goal", reducedLinesImg);
+		waitKey(1);
 	}
 
-	// fit line to each equivalence class point cloud
-	reducedLines = std::accumulate(pointClouds.begin(), pointClouds.end(), std::vector<Vec4i>{}, [](std::vector<Vec4i> target, const std::vector<Point2i>& _pointCloud){
-			std::vector<Point2i> pointCloud = _pointCloud;
-
-			//lineParams: [vx,vy, x0,y0]: (normalized vector, point on our contour)
-			// (x,y) = (x0,y0) + t*(vx,vy), t -> (-inf; inf)
-			Vec4f lineParams; fitLine(pointCloud, lineParams, CV_DIST_L2, 0, 0.01, 0.01);
-
-			// derive the bounding xs of point cloud
-			decltype(pointCloud)::iterator minXP, maxXP;
-			std::tie(minXP, maxXP) = std::minmax_element(pointCloud.begin(), pointCloud.end(), [](const Point2i& p1, const Point2i& p2){ return p1.x < p2.x; });
-
-			// derive y coords of fitted line
-			float m = lineParams[1] / lineParams[0];
-			int y1 = ((minXP->x - lineParams[2]) * m) + lineParams[3];
-			int y2 = ((maxXP->x - lineParams[2]) * m) + lineParams[3];
-
-			target.push_back(Vec4i(minXP->x, y1, maxXP->x, y2));
-			return target;
-			});
-	for(Vec4i reduced: reducedLines){
-		line(reducedLinesImg, Point(reduced[0], reduced[1]), Point(reduced[2], reduced[3]), Scalar(255, 255, 255), 2);
-	}
-	imshow("Goal", reducedLinesImg);
-	waitKey(1);
 }
 
 /**
@@ -303,12 +335,16 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 			flag = false;
         else
 		{
+			sort(crossPoints.begin(), crossPoints.end(), mySortY);
 			//if one crosspoint of left line and right line is within the image, it should be erased.
 			if (crossPoints.size() > 4)
-			{
-				sort(crossPoints.begin(), crossPoints.end(), mySortY);
 				crossPoints.erase(crossPoints.begin());
-			}
+			
+			if (crossPoints[0].x > crossPoints[1].x)
+				swap(crossPoints[0], crossPoints[1]);
+			if (crossPoints[2].x > crossPoints[3].x)
+				swap(crossPoints[2], crossPoints[3]);
+
 			Point2f center(0, 0);
 			
 			// Get mass center
@@ -329,6 +365,7 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 			{
 				bool isGoodPoints = true;
 
+				/*
 				for(int i = 0;i < crossPoints.size(); i++)
 				{
 					for(int j = i+ 1; j < crossPoints.size(); j++)
@@ -339,11 +376,20 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 							isGoodPoints = false;
 					}
 				}
+				*/
+				int h1, h2, w1, w2;
+				CalcDstSize(crossPoints, h1, h2, w1, w2);
+				if (h1 < MIN_QUADLENGTH || h1 > MAX_QUADLENGTH 
+					|| h2 < MIN_QUADLENGTH || h2 > MAX_QUADLENGTH
+					|| w1 < MIN_QUADLENGTH || w1 > MAX_QUADLENGTH
+					|| w2 < MIN_QUADLENGTH || w2 > MAX_QUADLENGTH)
+				{
+					isGoodPoints = false;
+				}
 
 				if(!isGoodPoints) flag = false;
 				else{
-					//topLeft, topRight, bottomLeft, bottomRight
-					sort(crossPoints.begin(), crossPoints.end(), comp);
+					
 					for(int i = 0; i < 4; i++)
 						circle(img, crossPoints[i], 9, Scalar(rand() & 255, rand() & 255, rand() & 255), 3);
 
@@ -475,7 +521,7 @@ void QuadScanner::QuadDetect(cv_bridge::CvImagePtr cv_ptr)
 	split(hsv, mv);
 	Mat s = mv[1];
 
-	threshold(s, s, 0.3, 255, THRESH_BINARY);
+	threshold(s, s, ADAPTIVEVALUE, 255, THRESH_BINARY);
 	s.convertTo(s, CV_8U, 1, 0);
 	Mat drawing = Mat::zeros(img.size(), CV_8UC3);
 	FindCandidate(s, drawing);
