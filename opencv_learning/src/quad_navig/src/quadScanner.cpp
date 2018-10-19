@@ -11,8 +11,9 @@
 #define CAMERAMAT "CameraMat"
 #define DISTCOEFF "DistCoeff"
 
-const int MAX_QUADLENGTH = 2000;
-const int MIN_QUADLENGTH = 50;
+const int MAXLENGTH = 2000;
+const int HMINLENGTH = 80;
+const int WMINLENGTH = 100;
 const float ADAPTIVEVALUE = 0.2;
 
 struct str{
@@ -379,10 +380,10 @@ void QuadScanner::IsQuad(Mat img, Mat img_proc, std::vector<Vec4i> lines, bool& 
 				*/
 				int h1, h2, w1, w2;
 				CalcDstSize(crossPoints, h1, h2, w1, w2);
-				if (h1 < MIN_QUADLENGTH || h1 > MAX_QUADLENGTH 
-					|| h2 < MIN_QUADLENGTH || h2 > MAX_QUADLENGTH
-					|| w1 < MIN_QUADLENGTH || w1 > MAX_QUADLENGTH
-					|| w2 < MIN_QUADLENGTH || w2 > MAX_QUADLENGTH)
+				if (h1 < HMINLENGTH || h1 > MAXLENGTH 
+					|| h2 < HMINLENGTH || h2 > MAXLENGTH
+					|| w1 < WMINLENGTH || w1 > MAXLENGTH
+					|| w2 < WMINLENGTH || w2 > MAXLENGTH)
 				{
 					isGoodPoints = false;
 				}
