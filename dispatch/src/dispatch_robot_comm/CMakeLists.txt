@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ros2json)
+project(dispatch_robot_comm)
 
 add_compile_options(-std=c++11)
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -14,16 +14,12 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     geometry_msgs
     actionlib_msgs
-    )
+)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 include_directories("${JSONCPP_INCLUDE_DIRS}")
-link_libraries(${JSONCPP_LIBRARIES})
-
-pkg_check_modules(YOCS yocs_msgs)
-include_directories("${YOCS_INCLUDE_DIRS}")
-link_libraries(${YOCS_LIBRARIES})
+#link_libraries(${JSONCPP_LIBRARIES})
 
 
 ###################################
@@ -36,28 +32,31 @@ link_libraries(${YOCS_LIBRARIES})
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-    #  INCLUDE_DIRS include
-    #  LIBRARIES ros2json
-    #  CATKIN_DEPENDS roscpp rospy std_msgs
-    #  DEPENDS system_lib
-    )
+#  INCLUDE_DIRS include
+#  LIBRARIES ros2json
+#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  DEPENDS system_lib
+)
 
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-    include
-    ${catkin_INCLUDE_DIRS}
-    )
+  include
+  ${catkin_INCLUDE_DIRS}
+)
 
-
-
-add_executable(dispatch_client_node  src/client_node.cpp)
-target_link_libraries(dispatch_client_node 
+add_library(dispatch_robot_lib src/dispatch_robot_comm.cpp)
+target_link_libraries(dispatch_robot_lib
     ${catkin_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    ${YOCS_LIBRARIES}
+    ${JSONCPP_LIBRARIES})
 
+add_executable(dispatch_robot_comm src/main.cpp)
+target_link_libraries(dispatch_robot_comm
+    dispatch_robot_lib
     )
 
-
+#add_executable(test_dispatch_robot_comm test/test_dispatch_robot_comm.cpp)
+#target_link_libraries(test_dispatch_robot_comm
+#    dispatch_robot_lib
+#    )

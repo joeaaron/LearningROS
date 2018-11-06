@@ -28,6 +28,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+
 add_executable(quad_navig
   src/quad_navig.cpp
   src/quadScanner.cpp
