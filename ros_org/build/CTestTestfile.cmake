@@ -5,6 +5,4 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs(gtest)
-subdirs(test_msgs)
-subdirs(hellorobot)
-subdirs(robot_setup_tf)
+subdirs(simple_navigation_goals)

@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node name="dispatch_robot_comm" pkg="dispatch_robot_comm" type="dispatch_robot_comm" output="screen" />
-      <param name="server_ip"                 value="192.168.1.104"     type="string"/>
-      <param name="server_port"               value="10001"             type="int"/>
-      <param name="dev_id"                    value="1"                 type="int"/>
-</launch>

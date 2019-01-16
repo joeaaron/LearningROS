@@ -1,2 +1,2 @@
-hellorobot:robot_setup_tf:test_msgs
--DCATKIN_DEVEL_PREFIX=/home/aaron/JA/code/LearningROS/ros_org/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/JA/code/LearningROS/ros_org/install -G Unix Makefiles
+hellorobot:robot_setup_tf:simple_navigation_goals:test_msgs
+-DCATKIN_WHITELIST_PACKAGES=simple_navigation_goals -DCATKIN_DEVEL_PREFIX=/home/aaron/JA/code/LearningROS/ros_org/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/JA/code/LearningROS/ros_org/install -G Unix Makefiles

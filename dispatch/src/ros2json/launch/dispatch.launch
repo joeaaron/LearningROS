@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node name="dispatch_client_node" pkg="ros2json" type="dispatch_client_node" output="screen" />
-      <param name="server_ip"                 value="192.168.1.104"     type="string"/>
-      <param name="server_port"               value="10001"             type="int"/>
-</launch>
