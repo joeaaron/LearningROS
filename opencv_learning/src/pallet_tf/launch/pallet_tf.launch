@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+  <node pkg="pallet_tf" type="pallet_tf" name="pallet_tf" args="$(find pallet_tf)/../data/param/calib.yml" output="screen">
+       <param name = "rosRate" type="double" value="2.0"/>
+       <param name="KERNALVALUE"  value="3"/>
+       <param name="RATIOMIN"  value="0.7"/>
+       <param name="RATIOMAX" value="1.8"/>
+
+	  	 <remap from="/colormap" to ="/camera/color/image_raw"/>
+       <remap from="/depthmap" to ="/camera/aligned_depth_to_color/image_raw"/>
+  </node>
+</launch>
